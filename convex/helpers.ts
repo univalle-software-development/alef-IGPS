@@ -1,3 +1,10 @@
+// ################################################################################
+// # File: helpers.ts                                                            # 
+// # Authors: Juan Camilo Narváez Tascón (github.com/ulvenforst)                  #
+// # Creation date: 08/17/2025                                                    #
+// # License: Apache License 2.0                                                  #
+// ################################################################################
+
 /**
  * ALEF UNIVERSITY: Business Logic Helpers
  * 

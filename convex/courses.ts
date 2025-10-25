@@ -1,3 +1,10 @@
+// ################################################################################
+// # File: courses.ts                                                            # 
+// # Authors: Juan Camilo Narváez Tascón (github.com/ulvenforst)                  #
+// # Creation date: 08/23/2025                                                    #
+// # License: Apache License 2.0                                                  #
+// ################################################################################
+
 /**
  * Course and section management functions
  * Handles course catalog, section creation, and course-program relationships
