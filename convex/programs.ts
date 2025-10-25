@@ -1,3 +1,10 @@
+// ################################################################################
+// # File: programs.ts                                                           # 
+// # Authors: Juan Camilo Narváez Tascón (github.com/ulvenforst)                  #
+// # Creation date: 08/23/2025                                                    #
+// # License: Apache License 2.0                                                  #
+// ################################################################################
+
 /**
  * Academic program management functions
  * Handles program creation, requirements, student assignments

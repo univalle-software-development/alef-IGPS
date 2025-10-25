@@ -1,3 +1,10 @@
+// ################################################################################
+// # File: auth.ts                                                                # 
+// # Authors: Juan Camilo Narváez Tascón (github.com/ulvenforst)                  #
+// # Creation date: 08/23/2025                                                    #
+// # License: Apache License 2.0                                                  #
+// ################################################################################
+
 /**
  * Authentication and user management functions
  * Handles Clerk integration, user creation, profile updates
