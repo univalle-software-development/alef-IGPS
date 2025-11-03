@@ -40,7 +40,7 @@ import { v } from "convex/values";
 
 export default defineSchema({
   /**
-   * Users table - Students, Professors, Admins based on Alef requirements
+   * Users table - Students, Professors, Admins
    */
   users: defineTable({
     // Authentication
@@ -161,7 +161,7 @@ export default defineSchema({
     .index("by_language_active", ["language", "isActive"]), // Combined for efficiency
 
   /**
-   * Academic periods (bimesters based on Alef requirements)
+   * Academic periods (bimesters)
    */
   periods: defineTable({
     code: v.string(), // "2024-B2"
@@ -280,7 +280,7 @@ export default defineSchema({
     .index("by_program_required", ["programId", "isRequired", "isActive"]), // Added isActive for better filtering
 
   /**
-   * Course sections based on Alef requirements
+   * Course sections
    */
   sections: defineTable({
     courseId: v.id("courses"),
@@ -342,7 +342,7 @@ export default defineSchema({
     updatedAt: v.optional(v.number()),
   })
     .index("by_crn", ["crn"])
-    .index("by_course_period", ["courseId", "periodId"]) // relations based on Alef requirements
+    .index("by_course_period", ["courseId", "periodId"])
     .index("by_period_status_active", ["periodId", "status", "isActive"]) // Combined index
     .index("by_professor_period", ["professorId", "periodId", "isActive"]), // Added isActive for filtering
 
