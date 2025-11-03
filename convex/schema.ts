@@ -161,7 +161,7 @@ export default defineSchema({
     .index("by_language_active", ["language", "isActive"]), // Combined for efficiency
 
   /**
-   * Academic periods (bimesters based on Alef requirements)
+   * Academic periods (bimesters)
    */
   periods: defineTable({
     code: v.string(), // "2024-B2"
