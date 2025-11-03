@@ -40,7 +40,7 @@ import { v } from "convex/values";
 
 export default defineSchema({
   /**
-   * Users table - Students, Professors, Admins
+   * Users table - Students, Professors, Admins based on Alef requirements
    */
   users: defineTable({
     // Authentication
@@ -280,7 +280,7 @@ export default defineSchema({
     .index("by_program_required", ["programId", "isRequired", "isActive"]), // Added isActive for better filtering
 
   /**
-   * Course sections
+   * Course sections based on Alef requirements
    */
   sections: defineTable({
     courseId: v.id("courses"),
@@ -342,7 +342,7 @@ export default defineSchema({
     updatedAt: v.optional(v.number()),
   })
     .index("by_crn", ["crn"])
-    .index("by_course_period", ["courseId", "periodId"])
+    .index("by_course_period", ["courseId", "periodId"]) // relations based on Alef requirements
     .index("by_period_status_active", ["periodId", "status", "isActive"]) // Combined index
     .index("by_professor_period", ["professorId", "periodId", "isActive"]), // Added isActive for filtering
 
