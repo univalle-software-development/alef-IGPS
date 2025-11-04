@@ -78,7 +78,7 @@ export function ProfessorFormDialog({
 
   const adminCreateProfessor = useAction(api.admin.createUserWithClerk);
   const adminUpdateProfessor = useMutation(api.admin.adminUpdateProfessor);
-  const deactivateUser = useMutation(api.auth.deactivateUser);
+  const deactivateUser = useMutation(api.auth.deleteUser);
 
   const teachingHistory = useQuery(
     api.admin.getProfessorTeachingHistory,
