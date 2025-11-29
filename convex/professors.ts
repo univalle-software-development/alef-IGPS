@@ -494,7 +494,7 @@ export const getMyTeachingHistory = query({
                 sectionsByPeriod.set(periodKey, {
                     period: {
                         _id: period?._id,
-                        nameEs: period?.nameEs ?? "Unknown Period",
+                        nameEs: period?.nameEs && period?.nameEn ? period?.nameEs + " / " + period?.nameEn : period?.nameEs || period?.nameEn,
                         year: period?.year,
                         bimesterNumber: period?.bimesterNumber,
                         startDate: period?.startDate,
@@ -509,7 +509,7 @@ export const getMyTeachingHistory = query({
                 course: {
                     _id: course?._id,
                     code: course?.code ?? "N/A",
-                    nameEs: course?.nameEs ?? "Unknown Course",
+                    nameEs: course?.nameEs && course?.nameEn ? course?.nameEs + " / " + course?.nameEn : course?.nameEs || course?.nameEn,
                     credits: course?.credits ?? 0,
                 },
                 statistics: {

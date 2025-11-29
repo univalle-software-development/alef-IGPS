@@ -125,9 +125,9 @@ export default defineSchema({
    */
   programs: defineTable({
     code: v.string(),
-    nameEs: v.string(),
+    nameEs: v.optional(v.string()),
     nameEn: v.optional(v.string()),
-    descriptionEs: v.string(),
+    descriptionEs: v.optional(v.string()),
     descriptionEn: v.optional(v.string()),
 
     type: v.union(
@@ -168,7 +168,7 @@ export default defineSchema({
     year: v.number(),
     bimesterNumber: v.number(), // 1-6
 
-    nameEs: v.string(), // "Segundo Bimestre 2024"
+    nameEs: v.optional(v.string()), // "Segundo Bimestre 2024"
     nameEn: v.optional(v.string()), // "Second Bimester 2024"
 
     // Period dates
@@ -206,9 +206,9 @@ export default defineSchema({
    */
   courses: defineTable({
     code: v.string(),
-    nameEs: v.string(),
+    nameEs: v.optional(v.string()),
     nameEn: v.optional(v.string()),
-    descriptionEs: v.string(),
+    descriptionEs: v.optional(v.string()),
     descriptionEn: v.optional(v.string()),
 
     credits: v.number(),

@@ -54,7 +54,7 @@ export const columnsPrograms: ColumnDef<Program>[] = [
       return (
         <div className="space-y-1 w-full">
           <div className="whitespace-normal break-words md:overflow-hidden md:text-ellipsis lg:break-normal lg:overflow-visible lg:text-clip">
-            {program.nameEs}
+            {program.nameEs && program.nameEn ? program.nameEs + " - " + program.nameEn : program.nameEs || program.nameEn}
           </div>
           {/* Mobile/Tablet view: show additional info below name */}
           <div className="block lg:hidden text-sm text-muted-foreground space-y-1">
@@ -234,7 +234,7 @@ export const columnsCourses: ColumnDef<Course>[] = [
       return (
         <div className="space-y-1 w-full">
           <div className="whitespace-normal break-words md:overflow-hidden md:text-ellipsis lg:break-normal lg:overflow-visible lg:text-clip">
-            {course.nameEs}
+            {course.nameEs && course.nameEn ? course.nameEs + " - " + course.nameEn : course.nameEs || course.nameEn}
           </div>
           {/* Mobile/Tablet view: show additional info below name */}
           <div className="block lg:hidden text-sm text-muted-foreground space-y-1">
@@ -449,6 +449,25 @@ export const columnsSections: ColumnDef<Section>[] = [
     },
   },
   {
+    accessorKey: "courseName",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hidden lg:flex"
+        >
+          Course
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const courseName = row.getValue("courseName") as string;
+      return <span className="hidden lg:inline">{courseName}</span>;
+    },
+  },
+  {
     accessorKey: "professorId",
     header: ({ column }) => {
       return (
@@ -569,7 +588,17 @@ export const columnsPeriod: ColumnDef<Period>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
-    }
+    },
+    cell: ({ row }) => {
+      const period = row.original;
+      return (
+        <div className="whitespace-normal break-words">
+          {period.nameEs && period.nameEn 
+            ? `${period.nameEs} - ${period.nameEn}` 
+            : period.nameEs || period.nameEn}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "year",

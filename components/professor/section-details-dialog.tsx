@@ -110,7 +110,7 @@ export function SectionDetailsDialog({
             await submitGrades({
                 sectionId: section._id as Id<"sections">,
                 grades: gradesToSubmit,
-                forceSubmit: false, // Change to true to bypass the period check
+                forceSubmit: false,
             });
 
             alert(t("sectionDetails.gradesSaved"));
@@ -198,7 +198,7 @@ export function SectionDetailsDialog({
                                 <span className="font-medium">{t("sectionDetails.description")}</span>
                             </div>
                             <p className="text-sm text-muted-foreground">
-                                {section.course?.descriptionEs || t("sectionDetails.mockDescription")}
+                                {section.course?.descriptionEs ? section.course.descriptionEs : section.course?.descriptionEn ? section.course.descriptionEn : t("sectionDetails.mockDescription")}
                             </p>
                         </div>
 

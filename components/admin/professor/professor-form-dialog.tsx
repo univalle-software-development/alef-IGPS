@@ -78,7 +78,7 @@ export function ProfessorFormDialog({
 
   const adminCreateProfessor = useAction(api.admin.createUserWithClerk);
   const adminUpdateProfessor = useMutation(api.admin.adminUpdateProfessor);
-  const deactivateUser = useMutation(api.auth.deleteUser);
+  const deactivateUser = useMutation(api.auth.deactivateUser);
 
   const teachingHistory = useQuery(
     api.admin.getProfessorTeachingHistory,
@@ -153,7 +153,7 @@ export function ProfessorFormDialog({
     setIsLoading(true);
     try {
       if (mode === "create") {
-        await adminCreateProfessor({
+        const result = await adminCreateProfessor({
           email: formData.email,
           firstName: formData.firstName,
           lastName: formData.lastName,
@@ -167,7 +167,7 @@ export function ProfessorFormDialog({
               : undefined,
           },
         });
-        alert("Professor created successfully and an invitation has been sent.");
+        alert(result.message);
       } else {
         if (!professor) return;
         await adminUpdateProfessor({

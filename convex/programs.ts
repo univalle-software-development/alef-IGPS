@@ -77,7 +77,7 @@ export const getAllPrograms = query({
             const searchLower = args.searchTerm.toLowerCase();
             programs = programs.filter(program =>
                 program.code.toLowerCase().includes(searchLower) ||
-                program.nameEs.toLowerCase().includes(searchLower) ||
+                program.nameEs?.toLowerCase().includes(searchLower) ||
                 (program.nameEn?.toLowerCase().includes(searchLower))
             );
         }
@@ -196,7 +196,7 @@ export const updateProgram = mutation({
     args: {
         programId: v.id("programs"),
         // Editable fields
-        nameEs: v.string(),
+        nameEs: v.optional(v.string()),
         nameEn: v.optional(v.string()),
         descriptionEs: v.string(),
         descriptionEn: v.optional(v.string()),
@@ -227,16 +227,18 @@ export const updateProgram = mutation({
 
         // Construct the update payload securely
         const updatePayload = {
-            nameEs: updates.nameEs,
-            nameEn: updates.nameEn,
-            descriptionEs: updates.descriptionEs,
-            descriptionEn: updates.descriptionEn,
-            degree: updates.degree,
-            language: updates.language,
-            tuitionPerCredit: updates.tuitionPerCredit,
-            isActive: updates.isActive,
+            ...updates,
             updatedAt: Date.now(),
         };
+
+        if (updates.nameEs !== undefined && updates.nameEn !== undefined) {
+            updatePayload.nameEs = updates.nameEs;
+            updatePayload.nameEn = updates.nameEn;
+        }
+        if (updates.descriptionEs !== undefined && updates.descriptionEn !== undefined) {
+            updatePayload.descriptionEs = updates.descriptionEs;
+            updatePayload.descriptionEn = updates.descriptionEn;
+        }
 
         await ctx.db.patch(programId, updatePayload);
 

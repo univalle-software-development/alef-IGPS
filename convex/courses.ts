@@ -84,7 +84,7 @@ export const getAllCourses = query({
             const searchLower = args.searchTerm.toLowerCase();
             courses = courses.filter(course =>
                 course.code.toLowerCase().includes(searchLower) ||
-                course.nameEs.toLowerCase().includes(searchLower) ||
+                course.nameEs?.toLowerCase().includes(searchLower) ||
                 (course.nameEn?.toLowerCase().includes(searchLower))
             );
         }
@@ -110,9 +110,9 @@ export const getAllCourses = query({
 export const createCourse = mutation({
     args: {
         code: v.string(),
-        nameEs: v.string(),
+        nameEs: v.optional(v.string()),
         nameEn: v.optional(v.string()),
-        descriptionEs: v.string(),
+        descriptionEs: v.optional(v.string()),
         descriptionEn: v.optional(v.string()),
         credits: v.number(),
         level: v.optional(v.union(
@@ -151,6 +151,24 @@ export const createCourse = mutation({
         // Validate credits
         if (args.credits <= 0) {
             throw new ConvexError("Credits must be greater than 0");
+        }
+
+        // Validate language-specific fields
+        if (args.language === "es" || args.language === "both") {
+            if (!args.nameEs || !args.descriptionEs) {
+                throw new ConvexError("Spanish name and description are required for Spanish or bilingual courses");
+            }
+        }
+
+        if (args.language === "en" || args.language === "both") {
+            if (!args.nameEn || !args.descriptionEn) {
+                throw new ConvexError("English name and description are required for English or bilingual courses");
+            }
+        }
+
+        // Ensure at least one language is provided
+        if (!args.nameEs && !args.nameEn) {
+            throw new ConvexError("At least one course name (Spanish or English) must be provided");
         }
 
         // Create course

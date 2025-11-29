@@ -281,11 +281,9 @@ export default function SectionsTable() {
                                         course.code
                                           .toLowerCase()
                                           .includes(searchLower) ||
-                                        course.nameEs
-                                          .toLowerCase()
+                                        course.nameEs?.toLowerCase()
                                           .includes(searchLower) ||
-                                        course.nameEn
-                                          ?.toLowerCase()
+                                        course.nameEn?.toLowerCase()
                                           .includes(searchLower)
                                       );
                                     })
@@ -413,7 +411,7 @@ export default function SectionsTable() {
                                       const searchLower = periodSearchValue.toLowerCase();
                                       return (
                                         period.code.toLowerCase().includes(searchLower) ||
-                                        period.nameEs.toLowerCase().includes(searchLower) ||
+                                        period.nameEs?.toLowerCase().includes(searchLower) ||
                                         period.nameEn?.toLowerCase().includes(searchLower) ||
                                         period.year.toString().includes(searchLower)
                                       );

@@ -87,6 +87,8 @@ export type Course = {
 export type Section = {
   _id: Id<"sections">;
   courseId: Id<"courses">;
+  courseNameEs?: string;
+  courseNameEn?: string;
   periodId: Id<"periods">;
   groupNumber: string;
   crn: string; // Course Reference Number
@@ -127,7 +129,7 @@ export type Period = {
   code: string;
   year: number;
   bimester: number;
-  nameEs: string;
+  nameEs?: string;
   nameEn?: string;
   startDate: number;
   endDate: number;
