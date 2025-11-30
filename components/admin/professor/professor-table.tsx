@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/popover";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { useTranslations } from "next-intl";
 
 type ProfessorTitleFilter =
   | "all"
@@ -52,6 +53,7 @@ type ProfessorTitleFilter =
   | "adjunct";
 
 export default function ProfessorTable() {
+    const t = useTranslations("components.admin.professor");
   const [nameSearch, setNameSearch] = React.useState("");
   const [selectedDepartmentId, setSelectedDepartmentId] =
     React.useState<string>("all");
@@ -202,7 +204,7 @@ export default function ProfessorTable() {
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="Search by name, employee code..."
+                        placeholder={t("tableSearchPlaceholder")}
                         value={nameSearch}
                         onChange={(e) => setNameSearch(e.target.value)}
                         className="pl-10 h-10 bg-background border-border/50 shadow-sm transition-colors focus:ring-2 focus:ring-primary/20"
@@ -379,7 +381,7 @@ export default function ProfessorTable() {
         {/* Data Table Section */}
         <div className="p-0">
           <DataTable
-            columns={columnsProfessor}
+            columns={columnsProfessor(t)}
             data={filteredProfessors}
             onRowClick={handleRowClick}
             primaryAction={null}
@@ -391,7 +393,7 @@ export default function ProfessorTable() {
               title: "No professors found",
               description: "No professors match the current filters.",
             }}
-            entityName="professor"
+            entityName={t("entityName")}
           />
         </div>
       </div>

@@ -941,7 +941,7 @@ export const columnsEnrollment = (t: (key: string) => string): ColumnDef<Enrollm
   },
 ];
 
-export const columnsStudent: ColumnDef<Student>[] = [
+export const columnsStudent = (t: (key: string) => string): ColumnDef<Student>[] => [
   {
     accessorKey: "firstName",
     header: ({ column }) => {
@@ -950,7 +950,7 @@ export const columnsStudent: ColumnDef<Student>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          {t("columns.name")}
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -990,7 +990,7 @@ export const columnsStudent: ColumnDef<Student>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hidden lg:flex"
         >
-          Student Code
+          {t("columns.studentCode")}
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -1010,7 +1010,7 @@ export const columnsStudent: ColumnDef<Student>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hidden lg:flex"
         >
-          Program
+          {t("columns.program")}
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -1029,7 +1029,7 @@ export const columnsStudent: ColumnDef<Student>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Status
+          {t("columns.status")}
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -1072,7 +1072,7 @@ export const columnsStudent: ColumnDef<Student>[] = [
   },
 ];
 
-export const columnsProfessor: ColumnDef<Professor>[] = [
+export const columnsProfessor = (t: (key: string) => string): ColumnDef<Professor>[] => [
   {
     accessorKey: "firstName",
     header: ({ column }) => {
@@ -1081,7 +1081,7 @@ export const columnsProfessor: ColumnDef<Professor>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          {t("columns.name")}
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -1130,7 +1130,7 @@ export const columnsProfessor: ColumnDef<Professor>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hidden lg:flex"
         >
-          Employee Code
+            {t("columns.employeeCode")}
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -1150,7 +1150,7 @@ export const columnsProfessor: ColumnDef<Professor>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hidden lg:flex"
         >
-          Title
+            {t("columns.title")}
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -1170,7 +1170,7 @@ export const columnsProfessor: ColumnDef<Professor>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="hidden lg:flex"
         >
-          Department
+            {t("columns.department")}
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -1189,7 +1189,7 @@ export const columnsProfessor: ColumnDef<Professor>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Status
+            {t("columns.status")}
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );

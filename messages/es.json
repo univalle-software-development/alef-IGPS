@@ -353,6 +353,14 @@
       "enrollments": {
         "title": "Gestión de Matrículas",
         "subtitle": "Ver y gestionar todas las matrículas de estudiantes en el sistema."
+      },
+      "professors": {
+        "title": "Gestión de Profesores",
+        "subtitle": "Ver y gestionar todos los profesores en el sistema."
+      },
+      "students": {
+        "title": "Gestión de Estudiantes",
+        "subtitle": "Ver y gestionar todos los estudiantes en el sistema."
       }
     }
   },
@@ -368,6 +376,45 @@
           "language": "Idioma",
           "credits": "Créditos",
           "availability": "Disponibilidad"
+        },
+        "dialog": {
+          "createTitle": "Crear Nuevo Programa",
+          "createInstruction": "Complete la información a continuación para crear un nuevo programa",
+          "updateTitle": "Editar Programa",
+          "updateInstruction": "Actualice la información del programa a continuación",
+          "basicInformation": "Información Básica",
+          "programCode": "Código del Programa",
+          "programCodePlaceholder": "Ingrese el código del programa",
+          "programType": "Tipo de Programa",
+          "programTypePlaceholder": "Seleccione el tipo",
+          "degreeTitle": "Título del Grado",
+          "degreeTitlePlaceholder": "Ingrese el título del grado",
+          "teachingLanguage": "Idioma de Enseñanza",
+          "teachingLanguagePlaceholder": "Seleccione el idioma",
+          "nameSpanish": "Nombre (Español)",
+          "nameSpanishPlaceholder": "Ingrese el nombre del programa en español",
+          "nameEnglish": "Nombre (Inglés)",
+          "nameEnglishPlaceholder": "Ingrese el nombre del programa en inglés",
+          "descriptionSpanish": "Descripción (Español)",
+          "descriptionSpanishPlaceholder": "Ingrese la descripción del programa en español",
+          "descriptionEnglish": "Descripción (Inglés)",
+          "descriptionEnglishPlaceholder": "Ingrese la descripción del programa en inglés",
+          "academicInformation": "Información Académica",
+          "totalCredits": "Créditos Totales",
+          "durationBimesters": "Duración (Bimestres)",
+          "tuitionPerCredit": "Matrícula por Crédito",
+          "programAvailability": "Disponibilidad del Programa",
+          "programAvailabilityPlaceholder": "Seleccione la disponibilidad",
+          "requiredFields": "Los campos obligatorios deben ser completados",
+          "createButton": "Crear Programa",
+          "updateButton": "Guardar Cambios",
+          "deleteButton": "Eliminar Programa",
+          "readonlyWarning": "Algunos campos son de solo lectura en el modo de edición para mantener la integridad de los datos.",
+          "available": "Disponible",
+          "unavailable": "No Disponible",
+          "spanish": "Español",
+          "english": "Inglés",
+          "spanishEnglish": "Español/Inglés"
         }
       },
       "course": {
@@ -420,6 +467,27 @@
           "status": "Estado",
           "grade": "Calificación",
           "retake": "Repetición"
+        }
+      },
+      "professor": {
+        "tableSearchPlaceholder": "Buscar profesores por nombre, código de empleado...",
+        "entityName": "profesores",
+        "columns": {
+          "name": "Nombre",
+          "employeeCode": "Código de Empleado",
+          "title": "Título",
+          "department": "Departamento",
+          "status": "Estado"
+        }
+      },
+      "student": {
+        "tableSearchPlaceholder": "Buscar estudiantes por nombre, código de estudiante...",
+        "entityName": "estudiantes",
+        "columns": {
+          "name": "Nombre",
+          "studentCode": "Código de Estudiante",
+          "program": "Programa",
+          "status": "Estado"
         }
       }
     },

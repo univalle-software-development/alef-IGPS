@@ -33,6 +33,7 @@ import { api } from "@/convex/_generated/api";
 import { Program, ProgramFormData } from "../types";
 import { Textarea } from "@/components/ui/textarea";
 import type { UserRole } from "@/convex/types";
+import {useTranslations} from 'next-intl';
 
 interface ProgramFormDialogProps {
   mode: "create" | "edit";
@@ -49,6 +50,7 @@ export function ProgramFormDialog({
   open: controlledOpen,
   onOpenChange,
 }: ProgramFormDialogProps) {
+  const t = useTranslations("components.admin.program.dialog");
   const [internalOpen, setInternalOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
@@ -232,10 +234,10 @@ export function ProgramFormDialog({
 
   const fieldEnabled = getFieldEnabledState();
   const isCreate = mode === "create";
-  const dialogTitle = isCreate ? "Create New Program" : "Edit Program";
+  const dialogTitle = isCreate ? t("createTitle") : t("updateTitle");
   const dialogDescription = isCreate
-    ? "Fill in the information below to create a new program"
-    : "Update the program information below";
+    ? t("createInstruction")
+    : t("updateInstruction");
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -266,20 +268,20 @@ export function ProgramFormDialog({
                   <div className="flex items-center gap-3 pb-3 border-b border-border/50">
                     <div className="w-2 h-2 rounded-full bg-deep-koamaru"></div>
                     <h3 className="text-lg font-semibold text-foreground">
-                      Basic Information
+                        {t("basicInformation")}
                     </h3>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="code" className="text-sm font-semibold text-foreground">
-                        Program Code <span className="text-destructive">*</span>
+                        {t("programCode")} <span className="text-destructive">*</span>
                       </Label>
                       <Input
                         id="code"
                         value={formData.code}
                         onChange={(e) => updateFormData("code", e.target.value)}
-                        placeholder="Enter program code"
+                        placeholder={t("programCodePlaceholder")}
                         className="border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                         disabled={!isCreate}
                         required
@@ -287,7 +289,7 @@ export function ProgramFormDialog({
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="type" className="text-sm font-semibold text-foreground">
-                        Program Type <span className="text-destructive">*</span>
+                        {t("programType")} <span className="text-destructive">*</span>
                       </Label>
                       <Select
                         value={formData.type || ""}
@@ -295,7 +297,7 @@ export function ProgramFormDialog({
                         disabled={!isCreate}
                       >
                         <SelectTrigger className="w-full border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200">
-                          <SelectValue placeholder="Select type" />
+                          <SelectValue placeholder={t("programTypePlaceholder")} />
                         </SelectTrigger>
                         <SelectContent className="bg-background border-border shadow-lg">
                           <SelectItem value="diploma">Diploma</SelectItem>
@@ -310,13 +312,13 @@ export function ProgramFormDialog({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="degree" className="text-sm font-semibold text-foreground">
-                        Degree Title
+                        {t("degreeTitle")}
                       </Label>
                       <Input
                         id="degree"
                         value={formData.degree}
                         onChange={(e) => updateFormData("degree", e.target.value)}
-                        placeholder="Enter degree title"
+                        placeholder={t("degreeTitlePlaceholder")}
                         className="border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                         disabled={!isCreate}
                       />
@@ -324,19 +326,19 @@ export function ProgramFormDialog({
 
                     <div className="space-y-2">
                       <Label htmlFor="language" className="text-sm font-semibold text-foreground">
-                        Teaching Language <span className="text-destructive">*</span>
+                        {t("teachingLanguage")} <span className="text-destructive">*</span>
                       </Label>
                       <Select
                         value={formData.language || ""}
                         onValueChange={(value) => updateFormData("language", value as Program['language'])}
                       >
                         <SelectTrigger className="w-full border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200">
-                          <SelectValue placeholder="Select language" />
+                          <SelectValue placeholder={t("teachingLanguagePlaceholder")} />
                         </SelectTrigger>
                         <SelectContent className="bg-background border-border shadow-lg">
-                          <SelectItem value="es">Spanish</SelectItem>
-                          <SelectItem value="en">English</SelectItem>
-                          <SelectItem value="both">English/Spanish</SelectItem>
+                          <SelectItem value="es">{t("spanish")}</SelectItem>
+                          <SelectItem value="en">{t("english")}</SelectItem>
+                          <SelectItem value="both">{t("spanishEnglish")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -345,13 +347,13 @@ export function ProgramFormDialog({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="nameEs" className="text-sm font-semibold text-foreground">
-                        Name (Spanish) {(formData.language === "es" || formData.language === "both") && <span className="text-destructive">*</span>}
+                        {t("nameSpanish")} {(formData.language === "es" || formData.language === "both") && <span className="text-destructive">*</span>}
                       </Label>
                       <Input
                         id="nameEs"
                         value={formData.nameEs}
                         onChange={(e) => updateFormData("nameEs", e.target.value)}
-                        placeholder="Enter program name in Spanish"
+                        placeholder={t("nameSpanishPlaceholder")}
                         className="border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                         disabled={isCreate ? !fieldEnabled.nameEs : !fieldEnabled.nameEs}
                         required={formData.language === "es" || formData.language === "both"}
@@ -359,13 +361,13 @@ export function ProgramFormDialog({
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="nameEn" className="text-sm font-semibold text-foreground">
-                        Name (English) {(formData.language === "en" || formData.language === "both") && <span className="text-destructive">*</span>}
+                        {t("nameEnglish")} {(formData.language === "en" || formData.language === "both") && <span className="text-destructive">*</span>}
                       </Label>
                       <Input
                         id="nameEn"
                         value={formData.nameEn}
                         onChange={(e) => updateFormData("nameEn", e.target.value)}
-                        placeholder="Enter program name in English"
+                        placeholder={t("nameEnglishPlaceholder")}
                         className="border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                         disabled={isCreate ? !fieldEnabled.nameEn : !fieldEnabled.nameEn}
                         required={formData.language === "en" || formData.language === "both"}
@@ -376,13 +378,13 @@ export function ProgramFormDialog({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="descriptionEs" className="text-sm font-semibold text-foreground">
-                        Description (Spanish) {(formData.language === "es" || formData.language === "both") && <span className="text-destructive">*</span>}
+                        {t("descriptionSpanish")}{(formData.language === "es" || formData.language === "both") && <span className="text-destructive">*</span>}
                       </Label>
                       <Textarea
                         id="descriptionEs"
                         value={formData.descriptionEs}
                         onChange={(e) => updateFormData("descriptionEs", e.target.value)}
-                        placeholder="Enter program description in Spanish"
+                        placeholder={t("descriptionSpanishPlaceholder")}
                         className="min-h-[100px] resize-none border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                         disabled={!fieldEnabled.descriptionEs}
                         required={formData.language === "es" || formData.language === "both"}
@@ -391,13 +393,13 @@ export function ProgramFormDialog({
 
                     <div className="space-y-2">
                       <Label htmlFor="descriptionEn" className="text-sm font-semibold text-foreground">
-                        Description (English) {(formData.language === "en" || formData.language === "both") && <span className="text-destructive">*</span>}
+                        {t("descriptionEnglish")} {(formData.language === "en" || formData.language === "both") && <span className="text-destructive">*</span>}
                       </Label>
                       <Textarea
                         id="descriptionEn"
                         value={formData.descriptionEn}
                         onChange={(e) => updateFormData("descriptionEn", e.target.value)}
-                        placeholder="Enter program description in English"
+                        placeholder={t("descriptionEnglishPlaceholder")}
                         className="min-h-[100px] resize-none border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                         disabled={!fieldEnabled.descriptionEn}
                         required={formData.language === "en" || formData.language === "both"}
@@ -411,14 +413,14 @@ export function ProgramFormDialog({
                   <div className="flex items-center gap-3 pb-3 border-b border-border/50">
                     <div className="w-2 h-2 rounded-full bg-deep-koamaru"></div>
                     <h3 className="text-lg font-semibold text-foreground">
-                      Academic Information
+                      {t("academicInformation")}
                     </h3>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="totalCredits" className="text-sm font-semibold text-foreground">
-                        Total Credits <span className="text-destructive">*</span>
+                        {t("totalCredits")} <span className="text-destructive">*</span>
                       </Label>
                       <Input
                         id="totalCredits"
@@ -436,7 +438,7 @@ export function ProgramFormDialog({
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="durationBimesters" className="text-sm font-semibold text-foreground">
-                        Duration (Bimesters) <span className="text-destructive">*</span>
+                        {t("durationBimesters")} <span className="text-destructive">*</span>
                       </Label>
                       <Input
                         id="durationBimesters"
@@ -454,7 +456,7 @@ export function ProgramFormDialog({
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="tuitionPerCredit" className="text-sm font-semibold text-foreground">
-                        Tuition per Credit ($)
+                        {t("tuitionPerCredit")}
                       </Label>
                       <Input
                         id="tuitionPerCredit"
@@ -473,18 +475,18 @@ export function ProgramFormDialog({
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="isActive" className="text-sm font-semibold text-foreground">
-                      Program Availability <span className="text-destructive">*</span>
+                      {t("programAvailability")} <span className="text-destructive">*</span>
                     </Label>
                     <Select
                       value={isCreate ? "" : formData.isActive.toString()}
                       onValueChange={(value) => updateFormData("isActive", value === "true")}
                     >
                       <SelectTrigger className="w-full border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200">
-                        <SelectValue placeholder="Select program availability" />
+                        <SelectValue placeholder={t("programAvailabilityPlaceholder")} />
                       </SelectTrigger>
                       <SelectContent className="bg-background border-border shadow-lg">
-                        <SelectItem value="true">Available</SelectItem>
-                        <SelectItem value="false">Unavailable</SelectItem>
+                        <SelectItem value="true">{t("available")}</SelectItem>
+                        <SelectItem value="false">{t("unavailable")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -495,11 +497,11 @@ export function ProgramFormDialog({
                   <div className="flex items-start gap-3">
                     <div className="text-sm space-y-2">
                       <p className="font-medium text-foreground">
-                        <span className="text-destructive">*</span> Required fields must be completed
+                        <span className="text-destructive">*</span> {t("requiredFields")}
                       </p>
                       {!isCreate && (
                         <p className="text-foreground">
-                          Some fields are read-only in edit mode to maintain data integrity.
+                          {t("readonlyWarning")}
                         </p>
                       )}
                     </div>
@@ -526,7 +528,7 @@ export function ProgramFormDialog({
                         ) : (
                           <div className="flex items-center gap-2">
                             <Trash2 className="h-4 w-4" />
-                            Delete Program
+                            {t("deleteButton")}
                           </div>
                         )}
                       </Button>
@@ -544,7 +546,7 @@ export function ProgramFormDialog({
                       ) : (
                         <div className="flex items-center gap-2">
                           <Save className="h-4 w-4" />
-                          {isCreate ? "Create Program" : "Save Changes"}
+                          {isCreate ? t("createButton") : t("updateButton")}
                         </div>
                       )}
                     </Button>

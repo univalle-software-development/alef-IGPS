@@ -354,6 +354,14 @@
       "enrollments": {
         "title": "Enrollment Management",
         "subtitle": "View and manage all student enrollments in the system."
+      },
+      "professors": {
+        "title": "Professor Management",
+        "subtitle": "View and manage all professors in the system."
+      },
+      "students": {
+        "title": "Student Management",
+        "subtitle": "View and manage all students in the system."
       }
     }
   },
@@ -369,6 +377,45 @@
           "language": "Language",
           "credits": "Credits",
           "availability": "Availability"
+        },
+        "dialog": {
+          "createTitle": "Create New Program",
+          "createInstruction": "Fill in the information below to create a new program",
+          "updateTitle": "Edit Program",
+          "updateInstruction": "Update the program information below",
+          "basicInformation": "Basic Information",
+          "programCode": "Program Code",
+          "programCodePlaceholder": "Enter program code",
+          "programType": "Program Type",
+          "programTypePlaceholder": "Select type",
+          "degreeTitle": "Degree Title",
+          "degreeTitlePlaceholder": "Enter degree title",
+          "teachingLanguage": "Teaching Language",
+          "teachingLanguagePlaceholder": "Select language",
+          "nameSpanish": "Name (Spanish)",
+          "nameSpanishPlaceholder": "Enter program name in Spanish",
+          "nameEnglish": "Name (English)",
+          "nameEnglishPlaceholder": "Enter program name in English",
+          "descriptionSpanish": "Description (Spanish)",
+          "descriptionSpanishPlaceholder": "Enter program description in Spanish",
+          "descriptionEnglish": "Description (English)",
+          "descriptionEnglishPlaceholder": "Enter program description in English",
+          "academicInformation": "Academic Information",
+          "totalCredits": "Total Credits",
+          "durationBimesters": "Duration (Bimesters)",
+          "tuitionPerCredit": "Tuition per Credit",
+          "programAvailability": "Program Availability",
+          "programAvailabilityPlaceholder": "Select availability",
+          "requiredFields": "Required fields must be completed",
+          "createButton": "Create Program",
+          "updateButton": "Save Changes",
+          "deleteButton": "Delete Program",
+          "readonlyWarning": "Some fields are read-only in edit mode to maintain data integrity.",
+          "available": "Available",
+          "unavailable": "Unavailable",
+          "spanish": "Spanish",
+          "english": "English",
+          "spanishEnglish": "Spanish/English"
         }
       },
       "course": {
@@ -421,6 +468,27 @@
           "status": "Status",
           "grade": "Grade",
           "retake": "Retake"
+        }
+      },
+      "professor": {
+        "tableSearchPlaceholder": "Search professors by name, employee code...",
+        "entityName": "professors",
+        "columns": {
+          "name": "Name",
+          "employeeCode": "Employee Code",
+          "title": "Title",
+          "department": "Department",
+          "status": "Status"
+        }
+      },
+      "student": {
+        "tableSearchPlaceholder": "Search by name, student code...",
+        "entityName": "students",
+        "columns": {
+          "name": "Name",
+          "studentCode": "Student Code",
+          "program": "Program",
+          "status": "Status"
         }
       }
     },
