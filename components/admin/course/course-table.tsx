@@ -43,6 +43,7 @@ import {
 } from "@/components/ui/popover";
 import { Id } from "@/convex/_generated/dataModel";
 import { CourseFormDialog } from "./course-form-dialog";
+import { useTranslations } from "next-intl";
 
 type CourseStatusFilter = "all" | "available" | "unavailable";
 type CourseLevelFilter =
@@ -60,6 +61,7 @@ type CourseCategoryFilter =
 type CourseLanguageFilter = "all" | "es" | "en" | "both";
 
 export default function CourseTable() {
+  const t = useTranslations("components.admin.course");
   const [nameSearch, setNameSearch] = React.useState("");
   const [selectedProgramId, setSelectedProgramId] = React.useState<
     Id<"programs"> | "all" | undefined
@@ -200,7 +202,7 @@ export default function CourseTable() {
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="Search courses by name, code..."
+                        placeholder={t("tableSearchPlaceholder")}
                         value={nameSearch}
                         onChange={(e) => setNameSearch(e.target.value)}
                         className="pl-10 h-10 bg-background border-border/50 shadow-sm transition-colors focus:ring-2 focus:ring-primary/20"
@@ -566,7 +568,7 @@ export default function CourseTable() {
           ) : (
             // Show data table when courses are loaded
             <DataTable
-              columns={columnsCourses}
+              columns={columnsCourses(t)}
               data={filteredCourses}
               onRowClick={handleRowClick}
               searchConfig={null}
@@ -619,7 +621,7 @@ export default function CourseTable() {
                   return `No courses match the selected filters: ${activeFilters.join(", ")}. Try adjusting your filters.`;
                 })(),
               }}
-              entityName="courses"
+              entityName={t("entityName")}
             />
           )}
         </div>

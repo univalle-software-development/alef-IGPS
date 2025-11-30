@@ -262,7 +262,7 @@ export default function ProgramTable() {
         {/* Data Table Section - Integrated */}
         <div className="bg-card">
           <DataTable
-            columns={columnsPrograms}
+            columns={columnsPrograms(t)}
             data={filteredPrograms}
             onRowClick={handleRowClick}
             searchConfig={null}
@@ -296,7 +296,7 @@ export default function ProgramTable() {
                 return `No programs match the selected filters: ${activeFilters.join(", ")}. Try adjusting your filters.`;
               })()
             }}
-            entityName="programs"
+            entityName={t("entityName")}
           />
         </div>
       </div>

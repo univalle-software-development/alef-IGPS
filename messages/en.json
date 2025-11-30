@@ -338,13 +338,48 @@
       "programs": {
         "title": "Program Management",
         "subtitle": "View and manage all academic programs in the system."
+      },
+      "courses": {
+        "title": "Course Management",
+        "subtitle": "View and manage all academic courses in the system."
       }
     }
   },
   "components": {
     "admin": {
       "program": {
-        "tableSearchPlaceholder": "Search programs by name, code..."
+        "tableSearchPlaceholder": "Search programs by name, code...",
+        "entityName": "programs",
+        "columns": {
+          "code": "Code",
+          "name": "Name",
+          "type": "Type",
+          "language": "Language",
+          "credits": "Credits",
+          "availability": "Availability"
+        }
+      },
+      "course": {
+        "tableSearchPlaceholder": "Search courses by name, code...",
+        "entityName": "courses",
+        "columns": {
+          "code": "Code",
+          "name": "Name",
+          "credits": "Credits",
+          "category": "Category",
+          "level": "Level",
+          "language": "Language",
+          "availability": "Availability"
+        }
+      }
+    },
+    "ui": {
+      "dataTable": {
+        "showing": "Showing",
+        "of": "of",
+        "previous": "Previous",
+        "next": "Next",
+        "page": "Page"
       }
     }
   },

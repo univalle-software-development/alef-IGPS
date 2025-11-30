@@ -337,13 +337,48 @@
       "programs": {
         "title": "Gestión de Programas",
         "subtitle": "Ver y gestionar todos los programas académicos en el sistema."
+      },
+      "courses": {
+        "title": "Gestión de Cursos",
+        "subtitle": "Ver y gestionar todos los cursos académicos en el sistema."
       }
     }
   },
   "components": {
     "admin": {
       "program": {
-        "tableSearchPlaceholder": "Buscar programas por nombre, código..."
+        "tableSearchPlaceholder": "Buscar programas por nombre, código...",
+        "entityName": "programas",
+        "columns": {
+          "code": "Código",
+          "name": "Nombre",
+          "type": "Tipo",
+          "language": "Idioma",
+          "credits": "Créditos",
+          "availability": "Disponibilidad"
+        }
+      },
+      "course": {
+        "tableSearchPlaceholder": "Buscar cursos por nombre, código...",
+        "entityName": "cursos",
+        "columns": {
+          "code": "Código",
+          "name": "Nombre",
+          "credits": "Créditos",
+          "category": "Categoría",
+          "language": "Idioma",
+          "level": "Nivel",
+          "availability": "Disponibilidad"
+        }
+      }
+    },
+    "ui": {
+      "dataTable": {
+        "showing": "Mostrando",
+        "of": "de",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "page": "Página"
       }
     }
   },

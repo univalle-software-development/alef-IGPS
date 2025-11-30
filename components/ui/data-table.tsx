@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { useTranslations } from "next-intl";
 
 import {
   ColumnDef,
@@ -89,7 +90,7 @@ export function DataTable<TData, TValue>({
       columnVisibility,
     },
   });
-
+const t = useTranslations("components.ui.dataTable");
   return (
     <div className="w-full space-y-6">
       {/* Controls Section */}
@@ -200,7 +201,7 @@ export function DataTable<TData, TValue>({
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-3 sm:p-4 bg-muted/30 rounded-lg">
           <div className="text-sm text-muted-foreground font-medium">
             <span>
-              Showing {table.getRowModel().rows.length} of {table.getFilteredRowModel().rows.length} {entityName}
+              {t("showing")} {table.getRowModel().rows.length} {t("of")} {table.getFilteredRowModel().rows.length} {entityName}
             </span>
           </div>
           <div className="flex items-center space-x-3">
@@ -210,10 +211,10 @@ export function DataTable<TData, TValue>({
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              Previous
+              {t("previous")}
             </Button>
             <div className="text-sm font-medium text-muted-foreground px-2">
-              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+              {t("page")} {table.getState().pagination.pageIndex + 1} {t("of")} {table.getPageCount()}
             </div>
             <Button
               variant="default"
@@ -221,7 +222,7 @@ export function DataTable<TData, TValue>({
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              Next
+              {t("next")}
             </Button>
           </div>
         </div>
