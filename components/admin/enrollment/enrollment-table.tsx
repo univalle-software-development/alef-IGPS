@@ -44,6 +44,7 @@ import {
 } from "@/components/ui/popover";
 import { Id } from "@/convex/_generated/dataModel";
 import { EnrollmentFormDialog } from "./enrollment-form-dialog";
+import {useTranslations} from "next-intl";
 
 type EnrollmentStatusFilter =
   | "all"
@@ -56,6 +57,7 @@ type EnrollmentStatusFilter =
   | "in_progress";
 
 export default function EnrollmentTable() {
+  const t = useTranslations("components.admin.enrollment");
   const [nameSearch, setNameSearch] = React.useState("");
 
   // Student filter states
@@ -217,7 +219,7 @@ export default function EnrollmentTable() {
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="Search enrollments by student name, email..."
+                        placeholder={t("tableSearchPlaceholder")}
                         value={nameSearch}
                         onChange={(e) => setNameSearch(e.target.value)}
                         className="pl-10 h-10 bg-background border-border/50 shadow-sm transition-colors focus:ring-2 focus:ring-primary/20"
@@ -703,7 +705,7 @@ export default function EnrollmentTable() {
         {/* Data Table Section - Integrated */}
         <div className="bg-card">
           <DataTable
-            columns={columnsEnrollment}
+            columns={columnsEnrollment(t)}
             data={filteredEnrollments}
             onRowClick={handleRowClick}
             searchConfig={null}
@@ -738,7 +740,7 @@ export default function EnrollmentTable() {
                 return `No enrollments match the selected filters: ${activeFilters.join(", ")}. Try adjusting your filters.`;
               })(),
             }}
-            entityName="enrollments"
+            entityName={t("entityName")}
           />
         </div>
       </div>

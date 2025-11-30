@@ -43,6 +43,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Id } from "@/convex/_generated/dataModel";
+import {useTranslations} from "next-intl";
 
 type SectionAvailabilityFilter = "all" | "available" | "unavailable";
 type SectionModalityFilter =
@@ -61,6 +62,7 @@ type SectionStatusFilter =
   | "completed";
 
 export default function SectionsTable() {
+    const t = useTranslations("components.admin.sections");
   const [nameSearch, setNameSearch] = React.useState("");
   const [selectedCourseId, setSelectedCourseId] = React.useState<
     Id<"courses"> | "all" | undefined
@@ -186,7 +188,7 @@ export default function SectionsTable() {
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search sections by group name..."
+                    placeholder={t("tableSearchPlaceholder")}
                     value={nameSearch}
                     onChange={(e) => setNameSearch(e.target.value)}
                     className="pl-10 h-10 bg-background border-border/50 shadow-sm transition-colors focus:ring-2 focus:ring-primary/20"
@@ -600,7 +602,7 @@ export default function SectionsTable() {
             ) : (
               // Show data table when sections are loaded
               <DataTable
-                columns={columnsSections}
+                columns={columnsSections(t)}
                 data={filteredSections}
                 onRowClick={handleRowClick}
                 searchConfig={null}
@@ -614,7 +616,7 @@ export default function SectionsTable() {
                   description:
                     "No sections found. Try adjusting your filters or create a new section.",
                 }}
-                entityName="sections"
+                entityName={t("entityName")}
               />
             )}
           </div>

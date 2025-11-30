@@ -341,6 +341,18 @@
       "courses": {
         "title": "Gestión de Cursos",
         "subtitle": "Ver y gestionar todos los cursos académicos en el sistema."
+      },
+      "periods": {
+        "title": "Gestión de Períodos",
+        "subtitle": "Ver y gestionar todos los períodos académicos en el sistema."
+      },
+      "sections": {
+        "title": "Gestión de Secciones",
+        "subtitle": "Ver y gestionar todas las secciones de cursos en el sistema."
+      },
+      "enrollments": {
+        "title": "Gestión de Matrículas",
+        "subtitle": "Ver y gestionar todas las matrículas de estudiantes en el sistema."
       }
     }
   },
@@ -369,6 +381,45 @@
           "language": "Idioma",
           "level": "Nivel",
           "availability": "Disponibilidad"
+        }
+      },
+      "period": {
+        "tableSearchPlaceholder": "Buscar períodos por código...",
+        "entityName": "períodos",
+        "columns": {
+          "code": "Código",
+          "name": "Nombre",
+          "startDate": "Fecha de Inicio",
+          "endDate": "Fecha de Fin",
+          "status": "Estado",
+          "year": "Año",
+          "bimester": "Bimestre"
+        }
+      },
+      "sections": {
+        "tableSearchPlaceholder": "Buscar secciones por nombre de grupo...",
+        "entityName": "secciones",
+        "columns": {
+          "group": "Grupo",
+          "course": "Curso",
+          "professor": "Profesor",
+          "deliveryMethod": "Método de Entrega",
+          "status": "Estado",
+          "availability": "Disponibilidad"
+        }
+      },
+      "enrollment": {
+        "tableSearchPlaceholder": "Buscar matrículas por nombre de estudiante, periodo...",
+        "entityName": "matrículas",
+        "columns": {
+          "student": "Estudiante",
+          "section": "Sección",
+          "period": "Período",
+          "course": "Curso",
+          "professor": "Profesor",
+          "status": "Estado",
+          "grade": "Calificación",
+          "retake": "Repetición"
         }
       }
     },

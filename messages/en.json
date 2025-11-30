@@ -342,6 +342,18 @@
       "courses": {
         "title": "Course Management",
         "subtitle": "View and manage all academic courses in the system."
+      },
+      "periods": {
+        "title": "Period Management",
+        "subtitle": "View and manage all academic periods in the system."
+      },
+      "sections": {
+        "title": "Sections Management",
+        "subtitle": "View and manage all course sections in the system."
+      },
+      "enrollments": {
+        "title": "Enrollment Management",
+        "subtitle": "View and manage all student enrollments in the system."
       }
     }
   },
@@ -370,6 +382,45 @@
           "level": "Level",
           "language": "Language",
           "availability": "Availability"
+        }
+      },
+      "period": {
+        "tableSearchPlaceholder": "Search periods by name, code...",
+        "entityName": "periods",
+        "columns": {
+          "code": "Code",
+          "name": "Name",
+          "startDate": "Start Date",
+          "endDate": "End Date",
+          "status": "Status",
+          "year": "Year",
+          "bimester": "Bimester"
+        }
+      },
+      "section": {
+        "tableSearchPlaceholder": "Search sections by course code, name...",
+        "entityName": "sections",
+        "columns": {
+          "group": "Group",
+          "course": "Course",
+          "professor": "Professor",
+          "deliveryMethod": "Delivery Method",
+          "status": "Status",
+          "availability": "Availability"
+        }
+      },
+      "enrollment": {
+        "tableSearchPlaceholder": "Search enrollments by student name, period...",
+        "entityName": "enrollments",
+        "columns": {
+          "student": "Student",
+          "section": "Section",
+          "period": "Period",
+          "course": "Course",
+          "professor": "Professor",
+          "status": "Status",
+          "grade": "Grade",
+          "retake": "Retake"
         }
       }
     },
