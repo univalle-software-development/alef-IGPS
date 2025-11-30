@@ -41,6 +41,7 @@ import { api } from "@/convex/_generated/api";
 import { Course } from "../types";
 import { Textarea } from "@/components/ui/textarea";
 import type { Id } from "@/convex/_generated/dataModel";
+import {useTranslations} from "next-intl";
 
 interface CourseFormDialogProps {
   mode: "create" | "edit";
@@ -57,6 +58,7 @@ export function CourseFormDialog({
   open: controlledOpen,
   onOpenChange,
 }: CourseFormDialogProps) {
+  const t = useTranslations("components.admin.course.dialog");
   const [internalOpen, setInternalOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
@@ -328,10 +330,10 @@ export function CourseFormDialog({
 
   const fieldEnabled = getFieldEnabledState();
 
-  const dialogTitle = mode === "edit" ? "Edit Course" : "Create Course";
+  const dialogTitle = mode === "edit" ? t("updateTitle") : t("createTitle");
   const dialogDescription = mode === "edit" 
-    ? "Update the course information below" 
-    : "Fill in the course information below";
+    ? t("updateInstruction")
+    : t("createInstruction");
 
   const dialogContent = (
     <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto bg-background border-border shadow-2xl">
@@ -358,7 +360,7 @@ export function CourseFormDialog({
                 <div className="flex items-center gap-3 pb-3 border-b border-border/50">
                   <div className="w-2 h-2 rounded-full bg-deep-koamaru"></div>
                   <h3 className="text-lg font-semibold text-foreground">
-                    Basic Information
+                   {t("basicInformation")}
                   </h3>
                 </div>
 
@@ -385,7 +387,7 @@ export function CourseFormDialog({
                       htmlFor="category"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Course Category{" "}
+                      {t("courseCategory")}{" "}
                       <span className="text-destructive">*</span>
                     </Label>
                     <Select
@@ -395,7 +397,7 @@ export function CourseFormDialog({
                       }
                     >
                       <SelectTrigger className="w-full border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200">
-                        <SelectValue placeholder="Select course category" />
+                        <SelectValue placeholder={t("courseCategoryPlaceholder")} />
                       </SelectTrigger>
                       <SelectContent className="bg-background border-border shadow-lg">
                         <SelectItem
@@ -429,7 +431,7 @@ export function CourseFormDialog({
                     htmlFor="language"
                     className="text-sm font-semibold text-foreground"
                   >
-                    Teaching Language{" "}
+                    {t("teachingLanguage")}{" "}
                     <span className="text-destructive">*</span>
                   </Label>
                   <Select
@@ -437,7 +439,7 @@ export function CourseFormDialog({
                     onValueChange={(value) => updateFormData("language", value)}
                   >
                     <SelectTrigger className="w-full  border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200">
-                      <SelectValue placeholder="Select language" />
+                      <SelectValue placeholder={t("teachingLanguagePlaceholder")} />
                     </SelectTrigger>
                     <SelectContent className="bg-background border-border shadow-lg">
                       <SelectItem value="es" className="hover:bg-muted/80">
@@ -459,13 +461,13 @@ export function CourseFormDialog({
                       htmlFor="nameEs"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Name (Spanish) {(formData.language === "es" || formData.language === "both") && <span className="text-destructive">*</span>}
+                      {t("nameSpanish")} {(formData.language === "es" || formData.language === "both") && <span className="text-destructive">*</span>}
                     </Label>
                     <Input
                       id="nameEs"
                       value={formData.nameEs}
                       onChange={(e) => updateFormData("nameEs", e.target.value)}
-                      placeholder="Enter course name in Spanish"
+                      placeholder={t("nameSpanishPlaceholder")}
                       className="border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                       disabled={!fieldEnabled.nameEs}
                       required={formData.language === "es" || formData.language === "both"}
@@ -476,13 +478,13 @@ export function CourseFormDialog({
                       htmlFor="nameEn"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Name (English) {(formData.language === "en" || formData.language === "both") && <span className="text-destructive">*</span>}
+                      {t("nameEnglish")} {(formData.language === "en" || formData.language === "both") && <span className="text-destructive">*</span>}
                     </Label>
                     <Input
                       id="nameEn"
                       value={formData.nameEn}
                       onChange={(e) => updateFormData("nameEn", e.target.value)}
-                      placeholder="Enter course name in English"
+                      placeholder={t("nameEnglishPlaceholder")}
                       className="border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                       disabled={!fieldEnabled.nameEn}
                       required={formData.language === "en" || formData.language === "both"}
@@ -496,7 +498,7 @@ export function CourseFormDialog({
                       htmlFor="descriptionEs"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Description (Spanish) {(formData.language === "es" || formData.language === "both") && <span className="text-destructive">*</span>}
+                      {t("descriptionSpanish")} {(formData.language === "es" || formData.language === "both") && <span className="text-destructive">*</span>}
                     </Label>
                     <Textarea
                       id="descriptionEs"
@@ -504,7 +506,7 @@ export function CourseFormDialog({
                       onChange={(e) =>
                         updateFormData("descriptionEs", e.target.value)
                       }
-                      placeholder="Enter course description in Spanish"
+                      placeholder={t("descriptionSpanishPlaceholder")}
                       className="min-h-[100px] resize-none border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                       disabled={!fieldEnabled.descriptionEs}
                       required={formData.language === "es" || formData.language === "both"}
@@ -516,7 +518,7 @@ export function CourseFormDialog({
                       htmlFor="descriptionEn"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Description (English) {(formData.language === "en" || formData.language === "both") && <span className="text-destructive">*</span>}
+                      {t("descriptionEnglish")} {(formData.language === "en" || formData.language === "both") && <span className="text-destructive">*</span>}
                     </Label>
                     <Textarea
                       id="descriptionEn"
@@ -524,7 +526,7 @@ export function CourseFormDialog({
                       onChange={(e) =>
                         updateFormData("descriptionEn", e.target.value)
                       }
-                      placeholder="Enter course description in English"
+                      placeholder={t("descriptionEnglishPlaceholder")}
                       className="min-h-[100px] resize-none border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                       disabled={!fieldEnabled.descriptionEn}
                       required={formData.language === "en" || formData.language === "both"}
@@ -538,7 +540,7 @@ export function CourseFormDialog({
                 <div className="flex items-center gap-3 pb-3 border-b border-border/50">
                   <div className="w-2 h-2 rounded-full bg-deep-koamaru"></div>
                   <h3 className="text-lg font-semibold text-foreground">
-                    Academic Information
+                    {t("academicInformation")}
                   </h3>
                 </div>
 
@@ -548,7 +550,7 @@ export function CourseFormDialog({
                       htmlFor="credits"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Credits <span className="text-destructive">*</span>
+                      {t("credits")} <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="credits"
@@ -567,7 +569,7 @@ export function CourseFormDialog({
                       htmlFor="level"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Course Level
+                        {t("courseLevel")} 
                     </Label>
                     <Select
                       value={formData.level || ""}
@@ -649,7 +651,7 @@ export function CourseFormDialog({
                       htmlFor="syllabus"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Syllabus URL
+                      {t("syllabus")}
                     </Label>
                     <Input
                       id="syllabus"
@@ -657,7 +659,7 @@ export function CourseFormDialog({
                       onChange={(e) =>
                         updateFormData("syllabus", e.target.value)
                       }
-                      placeholder="https://example.com/syllabus.pdf"
+                      placeholder={t("syllabusPlaceholder")}
                       className=" border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                     />
                   </div>
@@ -666,7 +668,7 @@ export function CourseFormDialog({
                       htmlFor="isActive"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Course Availability{" "}
+                      {t("courseAvailability")}{" "}
                       <span className="text-destructive">*</span>
                     </Label>
                     <Select
@@ -700,11 +702,10 @@ export function CourseFormDialog({
                 <div className="flex items-start gap-3">
                   <div className="text-sm space-y-2">
                     <p className="font-medium text-foreground">
-                      <span className="text-destructive">*</span> Required
-                      fields must be completed
+                      <span className="text-destructive">*</span> {t("requiredFields")}
                     </p>
                     <p className="text-foreground">
-                      The course code is read-only to maintain data integrity.
+                      {t("readonlyWarning")}
                     </p>
                   </div>
                 </div>
@@ -715,13 +716,13 @@ export function CourseFormDialog({
                 <div className="flex items-center gap-3 pb-3 border-b border-border/50">
                   <div className="w-2 h-2 rounded-full bg-deep-koamaru"></div>
                   <h3 className="text-lg font-semibold text-foreground">
-                    Associate with Programs
+                    {t("associateWithPrograms")}
                   </h3>
                 </div>
 
                 <div className="space-y-3">
                   <Label className="text-sm font-semibold text-foreground">
-                    Select Programs
+                    {t("associateWithProgramsPlaceholder")}
                   </Label>
                   <Popover open={comboboxOpen} onOpenChange={setComboboxOpen}>
                     <PopoverTrigger asChild>
@@ -837,7 +838,7 @@ export function CourseFormDialog({
                     </PopoverContent>
                   </Popover>
                   <p className="text-xs text-muted-foreground">
-                    * indicates required course for the program
+                    * {t("requiredCourseForProgram")}
                   </p>
                 </div>
               </div>
@@ -861,7 +862,7 @@ export function CourseFormDialog({
                     ) : (
                       <div className="flex items-center gap-2">
                         <Trash2 className="h-4 w-4" />
-                        Delete Course
+                        {t("deleteButton")}
                       </div>
                     )}
                   </Button>
@@ -875,7 +876,7 @@ export function CourseFormDialog({
                   ) : (
                     <div className="flex items-center gap-2">
                       <Save className="h-4 w-4" />
-                      Save Changes
+                      {t("updateButton")}
                     </div>
                   )}
                 </Button>

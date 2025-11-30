@@ -1,6 +1,8 @@
 import AcademicHistoryTable from "@/components/student/academic-history-table";
+import { useTranslations } from "next-intl";
 
 export default function AcademicHistoryPage() {
+    const t = useTranslations("academicHistory");
     return (
         <div className="min-h-screen bg-background">
             {/* Header Section */}
@@ -9,10 +11,10 @@ export default function AcademicHistoryPage() {
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-6 sm:py-8">
                         <div className="space-y-3">
                             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-                                Academic History
+                                {t("title")}
                             </h1>
                             <p className="text-muted-foreground text-base sm:text-lg max-w-2xl">
-                                Complete academic record with all courses taken, grades, and period summaries.
+                                {t("subtitle")}
                             </p>
                         </div>
                     </div>
