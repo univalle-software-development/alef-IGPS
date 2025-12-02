@@ -470,7 +470,25 @@
           "requiredCourseForProgram": "Indica curso requerido para el programa",
           "createButton": "Crear Curso",
           "updateButton": "Guardar Cambios",
-          "deleteButton": "Eliminar Curso"
+          "deleteButton": "Eliminar Curso",
+          "fixErrorsWarning": "Por favor corrija los errores a continuación",
+          "createSuccess": "¡Curso creado exitosamente!",
+          "updateSuccess": "¡Curso actualizado exitosamente!",
+          "genericError": "Fallo al procesar la solicitud. Por favor intente de nuevo.",
+          "deleteConfirmation": "¿Está seguro que desea eliminar {courseName}?",
+          "deleteSuccess": "¡Curso eliminado exitosamente!",
+          "deleteError": "Fallo al eliminar el curso: {error}",
+          "cancelButton": "Cancelar",
+          "removeButton": "Eliminar",
+          "removeProgramConfirmation": "¿Está seguro que desea eliminar la asociación con este programa?",
+          "removeProgramSuccess": "Asociación con el programa eliminada.",
+          "removeProgramError": "Fallo al eliminar la asociación: {error}",
+          "associateProgramError": "Fallo al asociar el programa: {error}",
+          "nameEsRequired": "El nombre en español es requerido.",
+          "descriptionEsRequired": "La descripción en español es requerida.",
+          "nameEnRequired": "El nombre en inglés es requerido.",
+          "descriptionEnRequired": "La descripción en inglés es requerida.",
+          "creditsRequired": "Los créditos deben ser mayores a 0."
         }
       },
       "period": {
@@ -484,6 +502,25 @@
           "status": "Estado",
           "year": "Año",
           "bimester": "Bimestre"
+        },
+        "dialog": {
+          "createTitle": "Crear Nuevo Período",
+          "updateTitle": "Editar Período",
+          "createInstruction": "Complete la información a continuación para crear un nuevo período académico",
+          "updateInstruction": "Actualice la información del período a continuación",
+          "deleteButton": "Eliminar Período",
+          "createButton": "Crear Período",
+          "updateButton": "Guardar Cambios",
+          "creating": "Creando...",
+          "saving": "Guardando...",
+          "fixErrorsWarning": "Por favor corrija los errores a continuación",
+          "createSuccess": "¡Período creado exitosamente!",
+          "updateSuccess": "¡Período actualizado exitosamente!",
+          "genericError": "Fallo al procesar la solicitud: {error}",
+          "deleteConfirmation": "¿Está seguro que desea eliminar el período {periodCode}?",
+          "deleteSuccess": "¡Período eliminado exitosamente!",
+          "deleteError": "Fallo al eliminar el período: {error}",
+          "cancelButton": "Cancelar"
         }
       },
       "sections": {

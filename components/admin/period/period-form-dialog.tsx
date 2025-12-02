@@ -25,6 +25,8 @@ import { Id } from "@/convex/_generated/dataModel";
 import { Period } from "../types";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 // Period form data type for handling form state
 export type PeriodFormData = {
@@ -60,6 +62,7 @@ export function PeriodFormDialog({
   open: controlledOpen,
   onOpenChange,
 }: PeriodFormDialogProps) {
+  const t = useTranslations("components.admin.period.dialog");
   const [internalOpen, setInternalOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
@@ -263,22 +266,31 @@ export function PeriodFormDialog({
   const handleDelete = async () => {
     if (!period || mode === "create") return;
 
-    if (!confirm(`Are you sure you want to delete the period "${period.code}"? This action cannot be undone.`)) {
-      return;
-    }
-
-    setIsDeleting(true);
-
-    try {
-      await deletePeriod({ periodId: period._id });
-      alert("Period deleted successfully!");
-      setOpen(false);
-    } catch (error) {
-      console.error("Failed to delete period:", error);
-      alert(`Failed to delete period: ${(error as Error).message}`);
-    } finally {
-      setIsDeleting(false);
-    }
+    toast.error(t("deleteConfirmation", { periodCode: period.code }), {
+      action: {
+        label: t("deleteButton"),
+        onClick: async () => {
+          setIsDeleting(true);
+          try {
+            await deletePeriod({ periodId: period._id });
+            toast.success(t("deleteSuccess"));
+            setOpen(false);
+          } catch (error) {
+            console.error("Failed to delete period:", error);
+            toast.error(
+              t("deleteError", {
+                error: error instanceof Error ? error.message : "Unknown error",
+              }),
+            );
+          } finally {
+            setIsDeleting(false);
+          }
+        },
+      },
+      cancel: {
+        label: t("cancelButton"),
+      },
+    });
   };
 
   const updateFormData = (field: string, value: string | boolean | number) => {
@@ -312,10 +324,10 @@ export function PeriodFormDialog({
   };
 
   const isCreate = mode === "create";
-  const dialogTitle = isCreate ? "Create New Period" : "Edit Period";
+  const dialogTitle = isCreate ? t("createTitle") : t("updateTitle");
   const dialogDescription = isCreate
-    ? "Fill in the information below to create a new academic period"
-    : "Update the period information below";
+    ? t("createInstruction")
+    : t("updateInstruction");
 
   const dialogContent = (
     <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto bg-background border-border shadow-2xl">
@@ -683,7 +695,7 @@ export function PeriodFormDialog({
                 ) : (
                   <div className="flex items-center gap-2">
                     <Trash2 className="h-4 w-4" />
-                    Delete Period
+                    {t("deleteButton")}
                   </div>
                 )}
               </Button>
@@ -696,12 +708,12 @@ export function PeriodFormDialog({
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  {isCreate ? "Creating..." : "Saving..."}
+                  {isCreate ? t("creating") : t("saving")}
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
                   <Save className="h-4 w-4" />
-                  {isCreate ? "Create Period" : "Save Changes"}
+                  {isCreate ? t("createButton") : t("updateButton")}
                 </div>
               )}
             </Button>

@@ -41,7 +41,8 @@ import { api } from "@/convex/_generated/api";
 import { Course } from "../types";
 import { Textarea } from "@/components/ui/textarea";
 import type { Id } from "@/convex/_generated/dataModel";
-import {useTranslations} from "next-intl";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 interface CourseFormDialogProps {
   mode: "create" | "edit";
@@ -136,39 +137,39 @@ export function CourseFormDialog({
     }
   }, [open, initialFormData]);
 
+  const validateFormData = (data: typeof formData): string[] => {
+    const errors: string[] = [];
+    const language = data.language;
+
+    if (language === "es" || language === "both") {
+      if (!data.nameEs.trim()) errors.push(t("nameEsRequired"));
+      if (!data.descriptionEs.trim()) errors.push(t("descriptionEsRequired"));
+    }
+
+    if (language === "en" || language === "both") {
+      if (!data.nameEn.trim()) errors.push(t("nameEnRequired"));
+      if (!data.descriptionEn.trim()) errors.push(t("descriptionEnRequired"));
+    }
+
+    if (data.credits <= 0) errors.push(t("creditsRequired"));
+
+    return errors;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Dynamic validation based on language
-    const language = formData.language;
-    let isValid = true;
-    let errorMessage = "";
-
-    // Validate based on selected language
-    if (language === "es" || language === "both") {
-      if (!formData.nameEs || !formData.descriptionEs) {
-        isValid = false;
-        errorMessage = "Please fill in the required Spanish fields (Name and Description).";
-      }
-    }
-    
-    if (language === "en" || language === "both") {
-      if (!formData.nameEn || !formData.descriptionEn) {
-        isValid = false;
-        errorMessage = language === "both" 
-          ? "Please fill in the required English fields (Name and Description)."
-          : "Please fill in the required fields in English (Name and Description).";
-      }
-    }
-
-    // Validate credits
-    if (formData.credits <= 0) {
-      isValid = false;
-      errorMessage = "Credits must be greater than 0.";
-    }
-
-    if (!isValid) {
-      alert(errorMessage);
+    const validationErrors = validateFormData(formData);
+    if (validationErrors.length > 0) {
+      toast.warning(t("fixErrorsWarning"), {
+        description: (
+          <ul className="list-disc pl-5">
+            {validationErrors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        ),
+      });
       return;
     }
 
@@ -183,17 +184,30 @@ export function CourseFormDialog({
           descriptionEs: formData.descriptionEs || undefined,
           descriptionEn: formData.descriptionEn || undefined,
           credits: formData.credits,
-          level: formData.level as "introductory" | "intermediate" | "advanced" | "graduate",
+          level:
+            formData.level as
+              | "introductory"
+              | "intermediate"
+              | "advanced"
+              | "graduate",
           language: formData.language as "es" | "en" | "both",
-          category: formData.category as "humanities" | "core" | "elective" | "general",
+          category:
+            formData.category as "humanities" | "core" | "elective" | "general",
           prerequisites: formData.prerequisites
-              ? formData.prerequisites.split(',').map(p => p.trim()).filter(p => p)
-              : [],
-          corequisites: formData.corequisites && formData.corequisites.trim() !== ""
-              ? formData.corequisites.split(',').map(p => p.trim()).filter(p => p)
+            ? formData.prerequisites
+                .split(",")
+                .map((p) => p.trim())
+                .filter((p) => p)
+            : [],
+          corequisites:
+            formData.corequisites && formData.corequisites.trim() !== ""
+              ? formData.corequisites
+                  .split(",")
+                  .map((p) => p.trim())
+                  .filter((p) => p)
               : undefined,
           syllabus: formData.syllabus.trim() || undefined,
-      });
+        });
 
         // Associate programs if any were selected
         if (programsToAssociate.length > 0) {
@@ -206,12 +220,15 @@ export function CourseFormDialog({
                 categoryOverride: program.categoryOverride,
               });
             } catch (error) {
-              console.error(`Failed to associate program ${program.programCode}:`, error);
+              console.error(
+                `Failed to associate program ${program.programCode}:`,
+                error,
+              );
             }
           }
         }
 
-        alert("Course created successfully!");
+        toast.success(t("createSuccess"));
         setOpen(false);
       } else if (mode === "edit" && course) {
         await updateCourse({
@@ -221,25 +238,38 @@ export function CourseFormDialog({
           descriptionEs: formData.descriptionEs,
           descriptionEn: formData.descriptionEn || undefined,
           credits: formData.credits,
-          level: formData.level as "introductory" | "intermediate" | "advanced" | "graduate",
+          level:
+            formData.level as
+              | "introductory"
+              | "intermediate"
+              | "advanced"
+              | "graduate",
           language: formData.language as "es" | "en" | "both",
-          category: formData.category as "humanities" | "core" | "elective" | "general",
+          category:
+            formData.category as "humanities" | "core" | "elective" | "general",
           prerequisites: formData.prerequisites
-            ? formData.prerequisites.split(',').map(p => p.trim()).filter(p => p)
+            ? formData.prerequisites
+                .split(",")
+                .map((p) => p.trim())
+                .filter((p) => p)
             : [],
-          corequisites: formData.corequisites && formData.corequisites.trim() !== ""
-            ? formData.corequisites.split(',').map(p => p.trim()).filter(p => p)
-            : undefined,
+          corequisites:
+            formData.corequisites && formData.corequisites.trim() !== ""
+              ? formData.corequisites
+                  .split(",")
+                  .map((p) => p.trim())
+                  .filter((p) => p)
+              : undefined,
           syllabus: formData.syllabus.trim() || undefined,
           isActive: formData.isActive,
         });
 
-        alert("Course updated successfully!");
+        toast.success(t("updateSuccess"));
         setOpen(false);
       }
     } catch (error) {
       console.error("Failed to update course:", error);
-      alert("Failed to update course. Please try again.");
+      toast.error(t("genericError"));
     } finally {
       setIsLoading(false);
     }
@@ -281,50 +311,80 @@ export function CourseFormDialog({
 
   const handleDelete = async () => {
     if (!course) return;
-    if (!confirm(`Are you sure you want to delete the course "${course.nameEs}"? This action cannot be undone.`)) {
-      return;
-    }
 
-    setIsDeleting(true);
-
-    try {
-      await deleteCourse({ courseId: course._id });
-      alert("Course deleted successfully!");
-      setOpen(false);
-    } catch (error) {
-      console.error("Failed to delete course:", error);
-      alert(`Failed to delete course: ${error instanceof Error ? error.message : "Unknown error"}`);
-    } finally {
-      setIsDeleting(false);
-    }
+    toast.error(t("deleteConfirmation", { courseName: course.nameEs }), {
+      action: {
+        label: t("deleteButton"),
+        onClick: async () => {
+          setIsDeleting(true);
+          try {
+            await deleteCourse({ courseId: course._id });
+            toast.success(t("deleteSuccess"));
+            setOpen(false);
+          } catch (error) {
+            console.error("Failed to delete course:", error);
+            toast.error(
+              t("deleteError", {
+                error: error instanceof Error ? error.message : "Unknown error",
+              }),
+            );
+          } finally {
+            setIsDeleting(false);
+          }
+        },
+      },
+      cancel: {
+        label: t("cancelButton"),
+      },
+    });
   };
 
-  const handleRemoveProgram = async (programId: Id<"programs">, skipConfirmation = false) => {
+  const handleRemoveProgram = async (
+    programId: Id<"programs">,
+    skipConfirmation = false,
+  ) => {
     // In create mode, remove from temporary list
     if (mode === "create") {
-      setProgramsToAssociate(programsToAssociate.filter(p => p.programId !== programId));
+      setProgramsToAssociate(
+        programsToAssociate.filter((p) => p.programId !== programId),
+      );
       return;
     }
 
     // In edit mode, remove association from database
     if (!course) return;
 
-    // Ask for confirmation only when removing from chip (not from combobox toggle)
-    if (!skipConfirmation && !confirm("Are you sure you want to remove this program association?")) {
-      return;
-    }
-
-    try {
-      await removeCourseFromProgram({
-        courseId: course._id,
-        programId: programId,
-      });
-      if (!skipConfirmation) {
-        alert("Program removed successfully!");
+    const confirmedAction = async () => {
+      try {
+        await removeCourseFromProgram({
+          courseId: course._id,
+          programId: programId,
+        });
+        if (!skipConfirmation) {
+          toast.success(t("removeProgramSuccess"));
+        }
+      } catch (error) {
+        console.error("Failed to remove program:", error);
+        toast.error(
+          t("removeProgramError", {
+            error: error instanceof Error ? error.message : "Unknown error",
+          }),
+        );
       }
-    } catch (error) {
-      console.error("Failed to remove program:", error);
-      alert(`Failed to remove program: ${error instanceof Error ? error.message : "Unknown error"}`);
+    };
+
+    if (skipConfirmation) {
+      await confirmedAction();
+    } else {
+      toast.warning(t("removeProgramConfirmation"), {
+        action: {
+          label: t("removeButton"),
+          onClick: confirmedAction,
+        },
+        cancel: {
+          label: t("cancelButton"),
+        },
+      });
     }
   };
 
@@ -812,7 +872,7 @@ export function CourseFormDialog({
                                           categoryOverride: undefined,
                                         }).catch((error) => {
                                           console.error("Failed to associate program:", error);
-                                          alert(`Failed to associate program: ${error instanceof Error ? error.message : "Unknown error"}`);
+                                          toast.error(t("associateProgramError", { error: error instanceof Error ? error.message : "Unknown error" }));
                                         });
                                       }
                                     }
