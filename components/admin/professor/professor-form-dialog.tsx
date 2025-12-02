@@ -29,6 +29,7 @@ import {
 import { useMutation, useQuery, useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Professor } from "../types";
+import { toast } from "sonner";
 
 interface ProfessorFormData {
   firstName: string;
@@ -146,7 +147,15 @@ export function ProfessorFormDialog({
     // Basic validation
     const validationErrors = validateFormData(formData);
     if (validationErrors.length > 0) {
-      alert(`Please fix the following errors:\n\n${validationErrors.join('\n')}`);
+      toast.warning("Please fix the following errors:", {
+        description: (
+          <ul className="list-disc pl-5">
+            {validationErrors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        ),
+      });
       return;
     }
 
@@ -167,7 +176,7 @@ export function ProfessorFormDialog({
               : undefined,
           },
         });
-        alert(result.message);
+        toast.success(result.message);
       } else {
         if (!professor) return;
         await adminUpdateProfessor({
@@ -178,12 +187,12 @@ export function ProfessorFormDialog({
           title: formData.professorProfile.title || undefined,
           department: formData.professorProfile.department || undefined,
         });
-        alert("Professor updated successfully!");
+        toast.success("Professor updated successfully!");
       }
       setOpen(false);
     } catch (error) {
       console.error(`Failed to ${mode} professor:`, error);
-      alert(`Failed to ${mode} professor: ${(error as Error).message}`);
+      toast.error(`Failed to ${mode} professor`, { description: (error as Error).message });
     } finally {
       setIsLoading(false);
     }
@@ -191,20 +200,28 @@ export function ProfessorFormDialog({
 
   const handleDelete = async () => {
     if (!professor || mode === "create") return;
-    if (!confirm(`Are you sure you want to deactivate "${professor.firstName} ${professor.lastName}"?`)) {
-      return;
-    }
-    setIsDeleting(true);
-    try {
-      await deactivateUser({ userId: professor._id });
-      alert("Professor deactivated successfully!");
-      setOpen(false);
-    } catch (error) {
-      console.error("Failed to deactivate professor:", error);
-      alert(`Failed to deactivate professor: ${(error as Error).message}`);
-    } finally {
-      setIsDeleting(false);
-    }
+    toast.error(`Are you sure you want to deactivate "${professor.firstName} ${professor.lastName}"?`, {
+      description: "This action cannot be undone.",
+      action: {
+        label: "Deactivate",
+        onClick: async () => {
+          setIsDeleting(true);
+          try {
+            await deactivateUser({ userId: professor._id });
+            toast.success("Professor deactivated successfully!");
+            setOpen(false);
+          } catch (error) {
+            console.error("Failed to deactivate professor:", error);
+            toast.error("Failed to deactivate professor", { description: (error as Error).message });
+          } finally {
+            setIsDeleting(false);
+          }
+        },
+      },
+      cancel: {
+        label: "Cancel",
+      },
+    });
   };
 
   const updateFormData = (field: string, value: string | boolean | number) => {
