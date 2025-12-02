@@ -62,7 +62,7 @@ type SectionStatusFilter =
   | "completed";
 
 export default function SectionsTable() {
-    const t = useTranslations("components.admin.sections");
+    const t = useTranslations("components.admin.section");
   const [nameSearch, setNameSearch] = React.useState("");
   const [selectedCourseId, setSelectedCourseId] = React.useState<
     Id<"courses"> | "all" | undefined

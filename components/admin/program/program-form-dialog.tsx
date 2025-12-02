@@ -33,7 +33,8 @@ import { api } from "@/convex/_generated/api";
 import { Program, ProgramFormData } from "../types";
 import { Textarea } from "@/components/ui/textarea";
 import type { UserRole } from "@/convex/types";
-import {useTranslations} from 'next-intl';
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 interface ProgramFormDialogProps {
   mode: "create" | "edit";
@@ -122,7 +123,15 @@ export function ProgramFormDialog({
     e.preventDefault();
     const validationErrors = validateFormData(formData);
     if (validationErrors.length > 0) {
-      alert(`Please fix the following errors:\n\n${validationErrors.join('\n')}`);
+      toast.warning(t("fixErrorsWarning"), {
+        description: (
+          <ul className="list-disc pl-5">
+            {validationErrors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        ),
+      });
       return;
     }
     setIsLoading(true);
@@ -140,9 +149,12 @@ export function ProgramFormDialog({
           language: formData.language!,
           totalCredits: formData.totalCredits,
           durationBimesters: formData.durationBimesters,
-          tuitionPerCredit: formData.tuitionPerCredit > 0 ? formData.tuitionPerCredit : undefined,
+          tuitionPerCredit:
+            formData.tuitionPerCredit > 0
+              ? formData.tuitionPerCredit
+              : undefined,
         });
-        alert("Program created successfully!");
+        toast.success(t("createSuccess"));
       } else {
         if (!program) return;
         await updateProgram({
@@ -156,12 +168,12 @@ export function ProgramFormDialog({
           tuitionPerCredit: formData.tuitionPerCredit,
           isActive: formData.isActive,
         });
-        alert("Program updated successfully!");
+        toast.success(t("updateSuccess"));
       }
       setOpen(false);
     } catch (error) {
       console.error(`Failed to ${mode} program:`, error);
-      alert(`Failed to ${mode} program. Please try again.`);
+      toast.error(t("genericError"));
     } finally {
       setIsLoading(false);
     }
@@ -169,20 +181,31 @@ export function ProgramFormDialog({
 
   const handleDelete = async () => {
     if (!program || mode === "create") return;
-    if (!confirm(`Are you sure you want to delete the program "${program.nameEs}"? This action cannot be undone.`)) {
-      return;
-    }
-    setIsDeleting(true);
-    try {
-      await deleteProgram({ programId: program._id });
-      alert("Program deleted successfully!");
-      setOpen(false);
-    } catch (error) {
-      console.error("Failed to delete program:", error);
-      alert(`Failed to delete program: ${(error as Error).message}`);
-    } finally {
-      setIsDeleting(false);
-    }
+
+    toast.error(t("deleteConfirmation", { programName: program.nameEs }), {
+      action: {
+        label: t("deleteButton"),
+        onClick: async () => {
+          setIsDeleting(true);
+          try {
+            await deleteProgram({ programId: program._id });
+            toast.success(t("deleteSuccess"));
+            setOpen(false);
+          } catch (error) {
+            console.error("Failed to delete program:", error);
+            toast.error(t("deleteError"));
+          } finally {
+            setIsDeleting(false);
+          }
+        },
+      },
+      cancel: {
+        label: t("cancelButton"),
+        onClick: () => {
+          // Do nothing
+        },
+      },
+    });
   };
 
   const updateFormData = (field: string, value: string | boolean | number) => {

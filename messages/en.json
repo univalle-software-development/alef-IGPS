@@ -415,7 +415,15 @@
           "unavailable": "Unavailable",
           "spanish": "Spanish",
           "english": "English",
-          "spanishEnglish": "Spanish/English"
+          "spanishEnglish": "Spanish/English",
+          "fixErrorsWarning": "Please fix the errors",
+          "createSuccess": "Program created successfully!",
+          "updateSuccess": "Program updated successfully!",
+          "genericError": "Failed to process request. Please try again.",
+          "deleteConfirmation": "Are you sure you want to delete {programName}?",
+          "deleteSuccess": "Program deleted successfully!",
+          "deleteError": "Failed to delete program.",
+          "cancelButton": "Cancel"
         }
       },
       "course": {
@@ -463,7 +471,25 @@
           "requiredCourseForProgram": "Indicates required course for program",
           "createButton": "Create Course",
           "updateButton": "Save Changes",
-          "deleteButton": "Delete Course"
+          "deleteButton": "Delete Course",
+          "fixErrorsWarning": "Please fix the errors below",
+          "createSuccess": "Course created successfully!",
+          "updateSuccess": "Course updated successfully!",
+          "genericError": "Failed to process request. Please try again.",
+          "deleteConfirmation": "Are you sure you want to delete {courseName}?",
+          "deleteSuccess": "Course deleted successfully!",
+          "deleteError": "Failed to delete course: {error}",
+          "cancelButton": "Cancel",
+          "removeButton": "Remove",
+          "removeProgramConfirmation": "Are you sure you want to remove this program association?",
+          "removeProgramSuccess": "Program association removed.",
+          "removeProgramError": "Failed to remove program: {error}",
+          "associateProgramError": "Failed to associate program: {error}",
+          "nameEsRequired": "Spanish name is required.",
+          "descriptionEsRequired": "Spanish description is required.",
+          "nameEnRequired": "English name is required.",
+          "descriptionEnRequired": "English description is required.",
+          "creditsRequired": "Credits must be greater than 0."
         }
       },
       "period": {
@@ -477,6 +503,25 @@
           "status": "Status",
           "year": "Year",
           "bimester": "Bimester"
+        },
+        "dialog": {
+          "createTitle": "Create New Period",
+          "updateTitle": "Edit Period",
+          "createInstruction": "Fill in the information below to create a new academic period",
+          "updateInstruction": "Update the period information below",
+          "deleteButton": "Delete Period",
+          "createButton": "Create Period",
+          "updateButton": "Save Changes",
+          "creating": "Creating...",
+          "saving": "Saving...",
+          "fixErrorsWarning": "Please fix the errors below",
+          "createSuccess": "Period created successfully!",
+          "updateSuccess": "Period updated successfully!",
+          "genericError": "Failed to process request: {error}",
+          "deleteConfirmation": "Are you sure you want to delete period {periodCode}?",
+          "deleteSuccess": "Period deleted successfully!",
+          "deleteError": "Failed to delete period: {error}",
+          "cancelButton": "Cancel"
         }
       },
       "section": {

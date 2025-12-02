@@ -122,8 +122,14 @@ export function SectionFormDialog({
     // Enhanced validation with detailed error messages
     const validationErrors = validateFormData(formData);
     if (validationErrors.length > 0) {
-      toast.error("Validation Error", {
-        description: validationErrors.join(', '),
+      toast.warning("Please fix the following errors:", {
+        description: (
+          <ul className="list-disc pl-5">
+            {validationErrors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        ),
       });
       return;
     }
@@ -185,30 +191,36 @@ export function SectionFormDialog({
   const handleDelete = async () => {
     if (!section || mode === "create") return;
 
-    if (!confirm(`Are you sure you want to delete the section "${section.groupNumber}"? This action cannot be undone.`)) {
-      return;
-    }
+    toast.error(`Are you sure you want to delete the section "${section.groupNumber}"?`, {
+      description: "This action cannot be undone.",
+      action: {
+        label: "Delete",
+        onClick: async () => {
+          setIsDeleting(true);
+          try {
+            await deleteSection({
+              sectionId: section._id,
+              forceDelete: true,
+            });
 
-    setIsDeleting(true);
-
-    try {
-      await deleteSection({
-        sectionId: section._id,
-        forceDelete: true, // Allow deletion even with enrollments
-      });
-
-      toast.success("Section deleted successfully!", {
-        description: `Group ${section.groupNumber} has been removed`,
-      });
-      setOpen(false);
-    } catch (error) {
-      console.error("Failed to delete section:", error);
-      toast.error("Failed to delete section", {
-        description: "Please try again or contact support",
-      });
-    } finally {
-      setIsDeleting(false);
-    }
+            toast.success("Section deleted successfully!", {
+              description: `Group ${section.groupNumber} has been removed`,
+            });
+            setOpen(false);
+          } catch (error) {
+            console.error("Failed to delete section:", error);
+            toast.error("Failed to delete section", {
+              description: "Please try again or contact support",
+            });
+          } finally {
+            setIsDeleting(false);
+          }
+        },
+      },
+      cancel: {
+        label: "Cancel",
+      },
+    });
   };
 
   const updateFormData = (field: string, value: string | boolean | number) => {
