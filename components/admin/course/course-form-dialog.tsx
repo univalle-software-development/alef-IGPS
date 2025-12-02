@@ -41,6 +41,7 @@ import { api } from "@/convex/_generated/api";
 import { Course } from "../types";
 import { Textarea } from "@/components/ui/textarea";
 import type { Id } from "@/convex/_generated/dataModel";
+import {useTranslations} from "next-intl";
 
 interface CourseFormDialogProps {
   mode: "create" | "edit";
@@ -57,6 +58,7 @@ export function CourseFormDialog({
   open: controlledOpen,
   onOpenChange,
 }: CourseFormDialogProps) {
+  const t = useTranslations("components.admin.course.dialog");
   const [internalOpen, setInternalOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
@@ -137,9 +139,36 @@ export function CourseFormDialog({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation
-    if (!formData.nameEs || !formData.descriptionEs || formData.credits <= 0) {
-      alert("Please fill in all required fields with valid values.");
+    // Dynamic validation based on language
+    const language = formData.language;
+    let isValid = true;
+    let errorMessage = "";
+
+    // Validate based on selected language
+    if (language === "es" || language === "both") {
+      if (!formData.nameEs || !formData.descriptionEs) {
+        isValid = false;
+        errorMessage = "Please fill in the required Spanish fields (Name and Description).";
+      }
+    }
+    
+    if (language === "en" || language === "both") {
+      if (!formData.nameEn || !formData.descriptionEn) {
+        isValid = false;
+        errorMessage = language === "both" 
+          ? "Please fill in the required English fields (Name and Description)."
+          : "Please fill in the required fields in English (Name and Description).";
+      }
+    }
+
+    // Validate credits
+    if (formData.credits <= 0) {
+      isValid = false;
+      errorMessage = "Credits must be greater than 0.";
+    }
+
+    if (!isValid) {
+      alert(errorMessage);
       return;
     }
 
@@ -149,22 +178,22 @@ export function CourseFormDialog({
       if (mode === "create") {
         const courseId = await createCourse({
           code: `COURSE${Date.now()}`,
-          nameEs: formData.nameEs,
+          nameEs: formData.nameEs || undefined,
           nameEn: formData.nameEn || undefined,
-          descriptionEs: formData.descriptionEs,
+          descriptionEs: formData.descriptionEs || undefined,
           descriptionEn: formData.descriptionEn || undefined,
           credits: formData.credits,
           level: formData.level as "introductory" | "intermediate" | "advanced" | "graduate",
           language: formData.language as "es" | "en" | "both",
           category: formData.category as "humanities" | "core" | "elective" | "general",
           prerequisites: formData.prerequisites
-            ? formData.prerequisites.split(',').map(p => p.trim()).filter(p => p)
-            : [],
+              ? formData.prerequisites.split(',').map(p => p.trim()).filter(p => p)
+              : [],
           corequisites: formData.corequisites && formData.corequisites.trim() !== ""
-            ? formData.corequisites.split(',').map(p => p.trim()).filter(p => p)
-            : undefined,
+              ? formData.corequisites.split(',').map(p => p.trim()).filter(p => p)
+              : undefined,
           syllabus: formData.syllabus.trim() || undefined,
-        });
+      });
 
         // Associate programs if any were selected
         if (programsToAssociate.length > 0) {
@@ -230,7 +259,12 @@ export function CourseFormDialog({
       descriptionEn: language === "en" || language === "both",
     };
 
-    // For course editing, apply similar rules as program editing
+    // For course editing, prevent changing names if they already exist
+    // For create mode, allow all fields based on language selection
+    if (mode === "create") {
+      return languageEnabled;
+    }
+
     return {
       // Name fields: disabled if they already have a value, enabled if empty and language allows
       nameEs:
@@ -296,8 +330,10 @@ export function CourseFormDialog({
 
   const fieldEnabled = getFieldEnabledState();
 
-  const dialogTitle = mode === "edit" ? "Edit Course" : "Create Course";
-  const dialogDescription = "Update the course information below";
+  const dialogTitle = mode === "edit" ? t("updateTitle") : t("createTitle");
+  const dialogDescription = mode === "edit" 
+    ? t("updateInstruction")
+    : t("createInstruction");
 
   const dialogContent = (
     <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto bg-background border-border shadow-2xl">
@@ -324,32 +360,34 @@ export function CourseFormDialog({
                 <div className="flex items-center gap-3 pb-3 border-b border-border/50">
                   <div className="w-2 h-2 rounded-full bg-deep-koamaru"></div>
                   <h3 className="text-lg font-semibold text-foreground">
-                    Basic Information
+                   {t("basicInformation")}
                   </h3>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="code"
-                      className="text-sm font-semibold text-foreground"
-                    >
-                      Course Code
-                    </Label>
-                    <Input
-                      id="code"
-                      value={course?.code}
-                      className=" border-border bg-muted/50 text-muted-foreground"
-                      disabled
-                      readOnly
-                    />
-                  </div>
+                  {mode === "edit" && (
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="code"
+                        className="text-sm font-semibold text-foreground"
+                      >
+                        Course Code
+                      </Label>
+                      <Input
+                        id="code"
+                        value={course?.code}
+                        className="border-border bg-muted/50 text-muted-foreground"
+                        disabled
+                        readOnly
+                      />
+                    </div>
+                  )}
                   <div className="space-y-2">
                     <Label
                       htmlFor="category"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Course Category{" "}
+                      {t("courseCategory")}{" "}
                       <span className="text-destructive">*</span>
                     </Label>
                     <Select
@@ -359,7 +397,7 @@ export function CourseFormDialog({
                       }
                     >
                       <SelectTrigger className="w-full border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200">
-                        <SelectValue placeholder="Select course category" />
+                        <SelectValue placeholder={t("courseCategoryPlaceholder")} />
                       </SelectTrigger>
                       <SelectContent className="bg-background border-border shadow-lg">
                         <SelectItem
@@ -393,7 +431,7 @@ export function CourseFormDialog({
                     htmlFor="language"
                     className="text-sm font-semibold text-foreground"
                   >
-                    Teaching Language{" "}
+                    {t("teachingLanguage")}{" "}
                     <span className="text-destructive">*</span>
                   </Label>
                   <Select
@@ -401,7 +439,7 @@ export function CourseFormDialog({
                     onValueChange={(value) => updateFormData("language", value)}
                   >
                     <SelectTrigger className="w-full  border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200">
-                      <SelectValue placeholder="Select language" />
+                      <SelectValue placeholder={t("teachingLanguagePlaceholder")} />
                     </SelectTrigger>
                     <SelectContent className="bg-background border-border shadow-lg">
                       <SelectItem value="es" className="hover:bg-muted/80">
@@ -423,16 +461,16 @@ export function CourseFormDialog({
                       htmlFor="nameEs"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Name (Spanish) <span className="text-destructive">*</span>
+                      {t("nameSpanish")} {(formData.language === "es" || formData.language === "both") && <span className="text-destructive">*</span>}
                     </Label>
                     <Input
                       id="nameEs"
                       value={formData.nameEs}
                       onChange={(e) => updateFormData("nameEs", e.target.value)}
-                      placeholder="Enter course name in Spanish"
-                      className=" border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
+                      placeholder={t("nameSpanishPlaceholder")}
+                      className="border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                       disabled={!fieldEnabled.nameEs}
-                      required
+                      required={formData.language === "es" || formData.language === "both"}
                     />
                   </div>
                   <div className="space-y-2">
@@ -440,15 +478,16 @@ export function CourseFormDialog({
                       htmlFor="nameEn"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Name (English)
+                      {t("nameEnglish")} {(formData.language === "en" || formData.language === "both") && <span className="text-destructive">*</span>}
                     </Label>
                     <Input
                       id="nameEn"
                       value={formData.nameEn}
                       onChange={(e) => updateFormData("nameEn", e.target.value)}
-                      placeholder="Enter course name in English"
-                      className=" border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
+                      placeholder={t("nameEnglishPlaceholder")}
+                      className="border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                       disabled={!fieldEnabled.nameEn}
+                      required={formData.language === "en" || formData.language === "both"}
                     />
                   </div>
                 </div>
@@ -459,8 +498,7 @@ export function CourseFormDialog({
                       htmlFor="descriptionEs"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Description (Spanish){" "}
-                      <span className="text-destructive">*</span>
+                      {t("descriptionSpanish")} {(formData.language === "es" || formData.language === "both") && <span className="text-destructive">*</span>}
                     </Label>
                     <Textarea
                       id="descriptionEs"
@@ -468,10 +506,10 @@ export function CourseFormDialog({
                       onChange={(e) =>
                         updateFormData("descriptionEs", e.target.value)
                       }
-                      placeholder="Enter course description in Spanish"
+                      placeholder={t("descriptionSpanishPlaceholder")}
                       className="min-h-[100px] resize-none border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                       disabled={!fieldEnabled.descriptionEs}
-                      required
+                      required={formData.language === "es" || formData.language === "both"}
                     />
                   </div>
 
@@ -480,7 +518,7 @@ export function CourseFormDialog({
                       htmlFor="descriptionEn"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Description (English)
+                      {t("descriptionEnglish")} {(formData.language === "en" || formData.language === "both") && <span className="text-destructive">*</span>}
                     </Label>
                     <Textarea
                       id="descriptionEn"
@@ -488,9 +526,10 @@ export function CourseFormDialog({
                       onChange={(e) =>
                         updateFormData("descriptionEn", e.target.value)
                       }
-                      placeholder="Enter course description in English"
+                      placeholder={t("descriptionEnglishPlaceholder")}
                       className="min-h-[100px] resize-none border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                       disabled={!fieldEnabled.descriptionEn}
+                      required={formData.language === "en" || formData.language === "both"}
                     />
                   </div>
                 </div>
@@ -501,7 +540,7 @@ export function CourseFormDialog({
                 <div className="flex items-center gap-3 pb-3 border-b border-border/50">
                   <div className="w-2 h-2 rounded-full bg-deep-koamaru"></div>
                   <h3 className="text-lg font-semibold text-foreground">
-                    Academic Information
+                    {t("academicInformation")}
                   </h3>
                 </div>
 
@@ -511,14 +550,14 @@ export function CourseFormDialog({
                       htmlFor="credits"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Credits <span className="text-destructive">*</span>
+                      {t("credits")} <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="credits"
                       type="number"
                       value={formData.credits}
                       onChange={(e) =>
-                        updateFormData("credits", parseInt(e.target.value) || 0)
+                        updateFormData("credits", parseInt(e.target.value) || "")
                       }
                       className=" border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                       min="1"
@@ -530,7 +569,7 @@ export function CourseFormDialog({
                       htmlFor="level"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Course Level
+                        {t("courseLevel")} 
                     </Label>
                     <Select
                       value={formData.level || ""}
@@ -612,7 +651,7 @@ export function CourseFormDialog({
                       htmlFor="syllabus"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Syllabus URL
+                      {t("syllabus")}
                     </Label>
                     <Input
                       id="syllabus"
@@ -620,7 +659,7 @@ export function CourseFormDialog({
                       onChange={(e) =>
                         updateFormData("syllabus", e.target.value)
                       }
-                      placeholder="https://example.com/syllabus.pdf"
+                      placeholder={t("syllabusPlaceholder")}
                       className=" border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
                     />
                   </div>
@@ -629,7 +668,7 @@ export function CourseFormDialog({
                       htmlFor="isActive"
                       className="text-sm font-semibold text-foreground"
                     >
-                      Course Availability{" "}
+                      {t("courseAvailability")}{" "}
                       <span className="text-destructive">*</span>
                     </Label>
                     <Select
@@ -663,11 +702,10 @@ export function CourseFormDialog({
                 <div className="flex items-start gap-3">
                   <div className="text-sm space-y-2">
                     <p className="font-medium text-foreground">
-                      <span className="text-destructive">*</span> Required
-                      fields must be completed
+                      <span className="text-destructive">*</span> {t("requiredFields")}
                     </p>
                     <p className="text-foreground">
-                      The course code is read-only to maintain data integrity.
+                      {t("readonlyWarning")}
                     </p>
                   </div>
                 </div>
@@ -678,13 +716,13 @@ export function CourseFormDialog({
                 <div className="flex items-center gap-3 pb-3 border-b border-border/50">
                   <div className="w-2 h-2 rounded-full bg-deep-koamaru"></div>
                   <h3 className="text-lg font-semibold text-foreground">
-                    Associate with Programs
+                    {t("associateWithPrograms")}
                   </h3>
                 </div>
 
                 <div className="space-y-3">
                   <Label className="text-sm font-semibold text-foreground">
-                    Select Programs
+                    {t("associateWithProgramsPlaceholder")}
                   </Label>
                   <Popover open={comboboxOpen} onOpenChange={setComboboxOpen}>
                     <PopoverTrigger asChild>
@@ -706,7 +744,6 @@ export function CourseFormDialog({
                                   {program.isRequired && (
                                     <span className="text-xs">*</span>
                                   )}
-
                                 </span>
                               ))
                             ) : (
@@ -723,7 +760,6 @@ export function CourseFormDialog({
                                   {program.isRequired && (
                                     <span className="text-xs">*</span>
                                   )}
-
                                 </span>
                               ))
                             ) : (
@@ -741,24 +777,26 @@ export function CourseFormDialog({
                           <CommandEmpty>No program found.</CommandEmpty>
                           <CommandGroup>
                             {allPrograms?.map((program) => {
-                              // Check if program is already selected
                               const isSelected = mode === "edit"
                                 ? coursePrograms?.some(cp => cp.programId === program._id)
                                 : programsToAssociate.some(pa => pa.programId === program._id);
 
+                              // Get program name based on course language
+                              const programName = formData.language === "en" && program.nameEn 
+                                ? program.nameEn 
+                                : program.nameEs;
+
                               return (
                                 <CommandItem
                                   key={program._id}
-                                  value={program.nameEs}
+                                  value={`${program.code} ${program.nameEs} ${program.nameEn || ""}`}
                                   onSelect={() => {
                                     if (isSelected) {
-                                      // Deselect/Remove the program (no confirmation needed)
                                       handleRemoveProgram(program._id, true);
                                     } else {
-                                      // Select/Add the program
                                       const newProgram = {
                                         programId: program._id,
-                                        programName: program.nameEs,
+                                        programName: programName,
                                         programCode: program.code,
                                         isRequired: false,
                                         categoryOverride: undefined,
@@ -767,7 +805,6 @@ export function CourseFormDialog({
                                       if (mode === "create") {
                                         setProgramsToAssociate([...programsToAssociate, newProgram]);
                                       } else {
-                                        // In edit mode, associate immediately
                                         addCourseToProgram({
                                           courseId: course!._id,
                                           programId: program._id,
@@ -789,7 +826,7 @@ export function CourseFormDialog({
                                     )}
                                   />
                                   <div className="flex flex-col flex-1">
-                                    <span className="font-medium">{program.nameEs}</span>
+                                    <span className="font-medium">{programName}</span>
                                     <span className="text-xs text-muted-foreground">{program.code}</span>
                                   </div>
                                 </CommandItem>
@@ -801,7 +838,7 @@ export function CourseFormDialog({
                     </PopoverContent>
                   </Popover>
                   <p className="text-xs text-muted-foreground">
-                    * indicates required course for the program
+                    * {t("requiredCourseForProgram")}
                   </p>
                 </div>
               </div>
@@ -825,7 +862,7 @@ export function CourseFormDialog({
                     ) : (
                       <div className="flex items-center gap-2">
                         <Trash2 className="h-4 w-4" />
-                        Delete Course
+                        {t("deleteButton")}
                       </div>
                     )}
                   </Button>
@@ -839,7 +876,7 @@ export function CourseFormDialog({
                   ) : (
                     <div className="flex items-center gap-2">
                       <Save className="h-4 w-4" />
-                      Save Changes
+                      {t("updateButton")}
                     </div>
                   )}
                 </Button>

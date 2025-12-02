@@ -117,33 +117,27 @@ export const seedDatabase = internalAction({
 
     // --- 1. Create a Professor ---
     console.log("Creating professor...");
-    const professorId = await ctx.runMutation(internal.auth.internalCreateOrUpdateUser, {
-        clerkId: `pending_professor_${Date.now()}`,
-        email: "ulvenforst@gmail.com",
-        firstName: "Juan",
-        lastName: "Camilo",
+    const professorResult = await ctx.runAction(internal.admin.internalCreateUserWithClerk, {
+        email: "alvaradomariana184@gmail.com",
+        firstName: "Mariana",
+        lastName: "Alvarado",
         role: "professor",
-    });
-
-    await ctx.runMutation(internal.auth.internalUpdateUserRoleUnsafe, {
-        userId: professorId,
-        role: "professor",
-        isActive: true,
         professorProfile: {
-            employeeCode: "PROF-001",
+            employeeCode: "PROF-002",
             title: "Dr.",
-            department: "Theology",
+            department: "Sociology",
             hireDate: Date.now(),
         }
     });
+    const professorId = professorResult.userId;
     console.log(`✅ Professor created with ID: ${professorId}`);
 
     // --- 2. Create the Academic Program ---
     console.log("Creating academic program...");
     const programId = await ctx.runMutation(internal.programs.internalCreateProgram, {
       code: "14M",
-      nameEs: "Maestría en Pensamiento Cristiano",
-      descriptionEs: "Programa de maestría enfocado en el estudio profundo del pensamiento cristiano a lo largo de la historia.",
+      nameEs: "Maestría en Razonamiento Cristiano",
+      descriptionEs: "Programa de maestría enfocado en el estudio profundo del razonamiento cristiano a lo largo de la historia.",
       type: "master",
       language: "es",
       totalCredits: 40,
@@ -154,24 +148,9 @@ export const seedDatabase = internalAction({
     // --- 3. Create Courses and associate with the Program ---
     console.log("Creating courses...");
     const coursesData = [
-      { code: "MTHPR-01", name: "Métodos y técnicas de investigación", credits: 3 },
-      { code: "MTHBI-02", name: "Crítica bíblica", credits: 3 },
-      { code: "MTHHI-03", name: "Historia de la Iglesia", credits: 3 },
-      { code: "MTHSI-04", name: "Teología sistemática", credits: 3 },
-      { code: "MTHPR-05", name: "Oratoria sagrada", credits: 3 },
-      { code: "MTHSI-07", name: "Teología en el pensamiento humano", credits: 3 },
-      { code: "MTHSI-08", name: "Cristo y salvación", credits: 3 },
-      { code: "MTHHI-09", name: "Teología patrística y medieval", credits: 3 },
-      { code: "MTHSI-10", name: "Teología contemporánea", credits: 3 },
-      { code: "MTHHI-11", name: "Historia del pensamiento latinoamericano", credits: 3 },
-      { code: "MTHHI-12", name: "Pensamiento cristiano y la Iglesia del s XXI", credits: 3 },
-      { code: "MTHEX-18", name: "Exégesis Bíblica", credits: 3 },
-      { code: "CHMA-15", name: "Introducción al mundo académico", credits: 2 },
-      { code: "THSI-22", name: "Teología católica romana", credits: 3 },
-      { code: "THSI-23", name: "Teología protestante y corrientes denominacionales", credits: 3 },
-      { code: "MTHSI-11", name: "Nuevas teologías de la liberación", credits: 3 },
-      { code: "THSI-26", name: "Inculturación de la teología", credits: 3 },
-      { code: "THHI-06", name: "Padres de la Iglesia", credits: 3 },
+      { code: "MTHSR-07", name: "Teología en el razonamiento humano", credits: 3 },
+      { code: "MTHHR-11", name: "Historia del razonamiento latinoamericano", credits: 3 },
+      { code: "MTHHR-12", name: "Razonamiento cristiano y la Iglesia del s XXI", credits: 3 },
     ];
 
     const courseIds: Id<"courses">[] = [];
@@ -198,10 +177,10 @@ export const seedDatabase = internalAction({
     // --- 4. Create an Academic Period ---
     console.log("Creating academic period...");
     const periodId = await ctx.runMutation(internal.admin.internalCreatePeriod, {
-        code: `${year}-B5`,
+        code: `${year}-B4`,
         year: year,
-        bimesterNumber: 5,
-        nameEs: `Quinto Bimestre ${year}`,
+        bimesterNumber: 4,
+        nameEs: `Cuarto Bimestre ${year}`,
         startDate: now.getTime(),
         endDate: now.getTime() + (60 * 24 * 60 * 60 * 1000),
         enrollmentStart: now.getTime() - (7 * 24 * 60 * 60 * 1000),
@@ -213,7 +192,7 @@ export const seedDatabase = internalAction({
         status: "enrollment",
         isCurrentPeriod: true,
     });
-    console.log(`✅ Academic Period created for ${year}-B5 and set to current.`);
+    console.log(`✅ Academic Period created for ${year}-B4 and set to current.`);
 
     // --- 5. Create Sections for Courses ---
     console.log("Creating sections for each course...");
@@ -238,14 +217,8 @@ export const seedDatabase = internalAction({
     // --- 6. Create Students via Clerk Invitation ---
     console.log("Creating students and sending invitations...");
     const studentsData = [
-      { firstName: "Oscar", lastName: "Lopez", email: "lopez_oscar23@hotmail.com" },
-      { firstName: "Daniel", lastName: "Leshua", email: "danieljeshua97@gmail.com" },
-      { firstName: "Calles", lastName: "Diaz", email: "callesdiaz83@gmail.com" },
-      { firstName: "Liezer", lastName: "ZR", email: "liezerzr@hotmail.es" },
-      { firstName: "Jose", lastName: "Inestroza", email: "joseinestroza.swd@gmail.com" },
-      { firstName: "Carmen", lastName: "Ruiz", email: "carmen.ruiz.alicea@gmail.com" },
-      // { firstName: "Julian", lastName: "Puyo", email: "julian.puyo.jp@gmail.com" },
-      // { firstName: "Julian", lastName: "Puyo", email: "julian.puyo.jp2@gmail.com" },
+      { firstName: "Laura", lastName: "Betancourth1", email: "laura.betancourth2004@gmail.com" },
+      { firstName: "Laura", lastName: "Betancourth2", email: "lau.betancourt.horta@gmail.com" },
     ];
 
     const studentConvexIds: Id<"users">[] = [];

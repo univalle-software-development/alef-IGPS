@@ -196,6 +196,8 @@ export function EnrollmentFormDialog({
 
   // Auto-populate status based on period
   React.useEffect(() => {
+    if (mode === "edit") return;
+
     if (formData.periodId && periods && periods.length > 0) {
       const selectedPeriod = periods.find(p => p._id === formData.periodId);
       if (selectedPeriod && selectedPeriod.status) {
@@ -228,7 +230,7 @@ export function EnrollmentFormDialog({
         }));
       }
     }
-  }, [formData.periodId, periods]);
+  }, [formData.periodId, periods, mode]);
 
   // Filter sections based on course and period
   const filteredSections = React.useMemo(() => {
@@ -407,6 +409,7 @@ export function EnrollmentFormDialog({
                         role="combobox"
                         aria-expanded={studentComboboxOpen}
                         className="w-full  justify-between border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
+                        disabled={mode === "edit"}
                       >
                         {formData.studentId && students
                           ? students.find((student) => student._id === formData.studentId)
@@ -467,6 +470,7 @@ export function EnrollmentFormDialog({
                     onValueChange={(value) =>
                       updateFormData("periodId", value as Id<"periods">)
                     }
+                    disabled={mode === "edit"}
                   >
                     <SelectTrigger className="w-full  border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200">
                       <SelectValue placeholder="Select period" />
@@ -541,7 +545,7 @@ export function EnrollmentFormDialog({
                     onValueChange={(value) =>
                       updateFormData("sectionId", value as Id<"sections">)
                     }
-                    disabled={!formData.courseId || !formData.periodId}
+                    disabled={!formData.courseId || !formData.periodId || mode === "edit"}
                   >
                     <SelectTrigger className="w-full  border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200">
                       <SelectValue placeholder={
@@ -596,22 +600,29 @@ export function EnrollmentFormDialog({
                 </div>
 
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="status"
-                    className="text-sm font-semibold text-foreground"
-                  >
-                    Status <span className="text-muted-foreground text-xs">(Auto-populated)</span>
+                  <Label htmlFor="status" className="text-sm font-semibold text-foreground">
+                    Status {mode === "create" && <span className="text-muted-foreground text-xs">(Auto-populated)</span>}
                   </Label>
-                  <Input
-                    id="status"
-                    value={
-                      formData.status
-                        ? formData.status.charAt(0).toUpperCase() + formData.status.slice(1).replace("_", " ")
-                        : "Select a period first"
-                    }
-                    disabled
-                    className="w-full border-border bg-muted/50 cursor-not-allowed transition-all duration-200"
-                  />
+                  
+                  {/* Replace the disabled Input with a Select for better control */}
+                  <Select
+                    value={formData.status || ""}
+                    onValueChange={(value) => updateFormData("status", value)}
+                    disabled={false} // Always allow editing status
+                  >
+                    <SelectTrigger className="w-full border-border focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200">
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="enrolled">Enrolled</SelectItem>
+                      <SelectItem value="in_progress">In Progress</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="failed">Failed</SelectItem>
+                      <SelectItem value="withdrawn">Withdrawn</SelectItem>
+                      <SelectItem value="dropped">Dropped</SelectItem>
+                      <SelectItem value="incomplete">Incomplete</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>

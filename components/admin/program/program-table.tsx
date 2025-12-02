@@ -24,12 +24,14 @@ import {
 import { Plus, Filter, ChevronDown, Search } from "lucide-react";
 import { ProgramFormDialog } from "./program-form-dialog";
 import { Program } from "../types";
+import { useTranslations } from "next-intl";
 
 type ProgramStatusFilter = "all" | "available" | "unavailable";
 type ProgramTypeFilter = "all" | "diploma" | "bachelor" | "master" | "doctorate";
 type ProgramLanguageFilter = "all" | "es" | "en" | "both";
 
 export default function ProgramTable() {
+  const t = useTranslations("components.admin.program");
   const programs = useQuery(api.programs.getAllPrograms, {});
   const [nameSearch, setNameSearch] = React.useState("");
   const [selectedProgram, setSelectedProgram] = React.useState<
@@ -121,7 +123,7 @@ export default function ProgramTable() {
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="Search programs by name, code..."
+                        placeholder= {t("tableSearchPlaceholder")}
                         value={nameSearch}
                         onChange={(e) => setNameSearch(e.target.value)}
                         className="pl-10 h-10 bg-background border-border/50 shadow-sm transition-colors focus:ring-2 focus:ring-primary/20"
@@ -260,7 +262,7 @@ export default function ProgramTable() {
         {/* Data Table Section - Integrated */}
         <div className="bg-card">
           <DataTable
-            columns={columnsPrograms}
+            columns={columnsPrograms(t)}
             data={filteredPrograms}
             onRowClick={handleRowClick}
             searchConfig={null}
@@ -294,7 +296,7 @@ export default function ProgramTable() {
                 return `No programs match the selected filters: ${activeFilters.join(", ")}. Try adjusting your filters.`;
               })()
             }}
-            entityName="programs"
+            entityName={t("entityName")}
           />
         </div>
       </div>

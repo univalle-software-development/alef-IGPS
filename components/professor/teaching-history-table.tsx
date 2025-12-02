@@ -85,7 +85,7 @@ export default function TeachingHistoryTable() {
             const sections: TeachingHistorySection[] = periodData.sections.map((s: any) => ({
                 _id: s.section._id,
                 courseCode: s.course.code,
-                courseName: s.course.nameEs,
+                courseName: s.course.nameEs && s.course.nameEn ? s.course.nameEs + " / " + s.course.nameEn : s.course.nameEs || s.course.nameEn,
                 groupNumber: s.section.groupNumber,
                 credits: s.course.credits,
                 category: s.course.category,

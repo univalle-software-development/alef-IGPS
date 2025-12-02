@@ -1,6 +1,8 @@
 import TeachingHistoryTable from "@/components/professor/teaching-history-table";
+import {useTranslations} from "next-intl";
 
 export default function GradebookPage() {
+    const t = useTranslations("gradebook");
     return (
         <div className="min-h-screen bg-background">
             {/* Header Section */}
@@ -9,10 +11,10 @@ export default function GradebookPage() {
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-6 sm:py-8">
                         <div className="space-y-3">
                             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-                                Teaching History & Gradebook
+                                {t("title")}
                             </h1>
                             <p className="text-muted-foreground text-base sm:text-lg max-w-2xl">
-                                Manage grades and view your complete teaching history across all periods.
+                                {t("subtitle")}
                             </p>
                         </div>
                     </div>

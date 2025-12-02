@@ -23,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Id } from "@/convex/_generated/dataModel";
+import { useTranslations } from "next-intl"; 
 
 type PeriodYearFilter = "all" | "2024" | "2025" | "2026" | "2027";
 type PeriodStatusFilter =
@@ -34,6 +35,7 @@ type PeriodStatusFilter =
   | "closed";
 
 export default function PeriodTable() {
+  const t = useTranslations("components.admin.period");
   const [codeSearch, setCodeSearch] = React.useState("");
   const [selectedYear, setSelectedYear] =
     React.useState<PeriodYearFilter>("all");
@@ -128,7 +130,7 @@ export default function PeriodTable() {
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search periods by code..."
+                    placeholder={t("tableSearchPlaceholder")}
                     value={codeSearch}
                     onChange={(e) => setCodeSearch(e.target.value)}
                     className="pl-10 h-10 bg-background border-border/50 shadow-sm transition-colors focus:ring-2 focus:ring-primary/20"
@@ -277,7 +279,7 @@ export default function PeriodTable() {
         <div className="bg-card overflow-x-auto">
           <div className="min-w-full">
             <DataTable
-              columns={columnsPeriod}
+              columns={columnsPeriod(t)}
               data={filteredPeriods}
               onRowClick={handleRowClick}
               searchConfig={null}
@@ -291,7 +293,7 @@ export default function PeriodTable() {
                 description:
                   "No periods found. Try adjusting your filters or create a new period.",
               }}
-              entityName="periods"
+              entityName={t("entityName")}
             />
           </div>
         </div>

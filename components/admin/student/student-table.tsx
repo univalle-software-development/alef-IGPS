@@ -43,6 +43,7 @@ import {
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Id } from "../../../convex/_generated/dataModel";
+import { useTranslations } from 'next-intl';
 
 type StudentStatusFilter =
   | "all"
@@ -53,6 +54,7 @@ type StudentStatusFilter =
   | "withdrawn";
 
 export default function StudentTable() {
+    const t = useTranslations('components.admin.student');
   const [nameSearch, setNameSearch] = React.useState("");
   const [selectedProgramId, setSelectedProgramId] =
     React.useState<string>("all");
@@ -161,7 +163,7 @@ export default function StudentTable() {
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="Search by name, student code..."
+                        placeholder={t("tableSearchPlaceholder")}
                         value={nameSearch}
                         onChange={(e) => setNameSearch(e.target.value)}
                         className="pl-10 h-10 bg-background border-border/50 shadow-sm transition-colors focus:ring-2 focus:ring-primary/20"
@@ -347,7 +349,7 @@ export default function StudentTable() {
         {/* Data Table Section */}
         <div className="p-0">
           <DataTable
-            columns={columnsStudent}
+            columns={columnsStudent(t)}
             data={filteredStudents}
             onRowClick={handleRowClick}
             primaryAction={
@@ -361,7 +363,7 @@ export default function StudentTable() {
               title: "No students found",
               description: "No students match the current filters.",
             }}
-            entityName="student"
+            entityName={t("entityName")}
           />
         </div>
       </div>

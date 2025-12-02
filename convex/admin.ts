@@ -118,7 +118,7 @@ export const createPeriod = mutation({
         code: v.string(),
         year: v.number(),
         bimesterNumber: v.number(),
-        nameEs: v.string(),
+        nameEs: v.optional(v.string()),
         nameEn: v.optional(v.string()),
         startDate: v.number(),
         endDate: v.number(),
@@ -1162,7 +1162,8 @@ export const getAllPeriods = query({
             const searchLower = args.searchTerm.toLowerCase();
             periods = periods.filter(p =>
                 p.code.toLowerCase().includes(searchLower) ||
-                p.nameEs.toLowerCase().includes(searchLower)
+                p.nameEs?.toLowerCase().includes(searchLower) ||
+                p.nameEn?.toLowerCase().includes(searchLower)
             );
         }
 
@@ -1182,7 +1183,7 @@ export const getAllPeriods = query({
 export const updatePeriod = mutation({
     args: {
         periodId: v.id("periods"),
-        nameEs: v.string(),
+        nameEs: v.optional(v.string()),
         nameEn: v.optional(v.string()),
         startDate: v.number(),
         endDate: v.number(),
@@ -1399,7 +1400,7 @@ export const adminGetSections = query({
 
                 return {
                     ...section,
-                    courseName: course ? `${course.code} - ${course.nameEs}` : "N/A",
+                    courseName: course ? `${course.code} - ${course.nameEs || course.nameEn || ""}` : "N/A",
                     courseCode: course?.code,
                     professorName: professor ? `${professor.firstName} ${professor.lastName}` : "TBD",
                     periodName: period?.nameEs
@@ -1559,7 +1560,7 @@ export const createUserWithClerk = action({
             throw new Error("CLERK_SECRET_KEY environment variable is not set.");
         }
 
-        const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.APP_URL || "https://www.alefsru.com";
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.APP_URL || "https://alef-igps.vercel.app";
 
         // **STEP 1: CREATE INVITATION WITH FIRST/LAST NAME IN PUBLIC METADATA**
         const invitationResponse = await fetch("https://api.clerk.com/v1/invitations", {
