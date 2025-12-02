@@ -414,7 +414,15 @@
           "unavailable": "No Disponible",
           "spanish": "Español",
           "english": "Inglés",
-          "spanishEnglish": "Español/Inglés"
+          "spanishEnglish": "Español/Inglés",
+          "fixErrorsWarning": "Por favor corrija los errores",
+          "createSuccess": "¡Programa creado exitosamente!",
+          "updateSuccess": "¡Programa actualizado exitosamente!",
+          "genericError": "Fallo al procesar la solicitud. Por favor intente de nuevo.",
+          "deleteConfirmation": "¿Está seguro que desea eliminar {programName}?",
+          "deleteSuccess": "¡Programa eliminado exitosamente!",
+          "deleteError": "Fallo al eliminar el programa.",
+          "cancelButton": "Cancelar"
         }
       },
       "course": {

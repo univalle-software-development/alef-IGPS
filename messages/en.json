@@ -415,7 +415,15 @@
           "unavailable": "Unavailable",
           "spanish": "Spanish",
           "english": "English",
-          "spanishEnglish": "Spanish/English"
+          "spanishEnglish": "Spanish/English",
+          "fixErrorsWarning": "Please fix the errors",
+          "createSuccess": "Program created successfully!",
+          "updateSuccess": "Program updated successfully!",
+          "genericError": "Failed to process request. Please try again.",
+          "deleteConfirmation": "Are you sure you want to delete {programName}?",
+          "deleteSuccess": "Program deleted successfully!",
+          "deleteError": "Failed to delete program.",
+          "cancelButton": "Cancel"
         }
       },
       "course": {
