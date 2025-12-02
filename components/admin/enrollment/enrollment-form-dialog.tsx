@@ -41,6 +41,7 @@ import { Enrollment } from "../types";
 import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { toast } from "sonner";
 
 // Enrollment form data type for handling form state
 export type EnrollmentFormData = {
@@ -242,16 +243,31 @@ export function EnrollmentFormDialog({
     });
   }, [sections, formData.courseId, formData.periodId]);
 
+  const validateFormData = (data: EnrollmentFormData): string[] => {
+    const errors: string[] = [];
+
+    if (!data.studentId) errors.push("Student is required.");
+    if (!data.sectionId) errors.push("Section is required.");
+    if (!data.periodId) errors.push("Period is required.");
+    if (!data.courseId) errors.push("Course is required.");
+    if (!data.status) errors.push("Status is required.");
+
+    return errors;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
-    // Basic validation
-    if (
-      !formData.studentId ||
-      !formData.sectionId ||
-      !formData.periodId ||
-      !formData.courseId ||
-      !formData.status
-    ) {
-      alert("Please fill in all required fields.");
+    e.preventDefault();
+    const validationErrors = validateFormData(formData);
+    if (validationErrors.length > 0) {
+      toast.warning("Please fix the following errors:", {
+        description: (
+          <ul className="list-disc pl-5">
+            {validationErrors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        ),
+      });
       return;
     }
 
@@ -277,7 +293,7 @@ export function EnrollmentFormDialog({
           countsForProgress: formData.countsForProgress,
           incompleteDeadline: formData.incompleteDeadline,
         });
-        alert("Enrollment created successfully!");
+        toast.success("Enrollment created successfully!");
       } else {
         if (!enrollment) return;
 
@@ -295,13 +311,13 @@ export function EnrollmentFormDialog({
           countsForProgress: formData.countsForProgress,
           incompleteDeadline: formData.incompleteDeadline,
         });
-        alert("Enrollment updated successfully!");
+        toast.success("Enrollment updated successfully!");
       }
 
       setOpen(false);
     } catch (error) {
       console.error(`Failed to ${mode} enrollment:`, error);
-      alert(`Failed to ${mode} enrollment: ${(error as Error).message}`);
+      toast.error(`Failed to ${mode} enrollment`, { description: (error as Error).message });
     } finally {
       setIsLoading(false);
     }
@@ -310,24 +326,28 @@ export function EnrollmentFormDialog({
   const handleDelete = async () => {
     if (!enrollment) return;
 
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this enrollment? This action cannot be undone."
-    );
-
-    if (!confirmed) return;
-
-    setIsDeleting(true);
-
-    try {
-      await deleteEnrollment({ enrollmentId: enrollment._id });
-      alert("Enrollment deleted successfully!");
-      setOpen(false);
-    } catch (error) {
-      console.error("Failed to delete enrollment:", error);
-      alert(`Failed to delete enrollment: ${(error as Error).message}`);
-    } finally {
-      setIsDeleting(false);
-    }
+    toast.error("Are you sure you want to delete this enrollment?", {
+      description: "This action cannot be undone.",
+      action: {
+        label: "Delete",
+        onClick: async () => {
+          setIsDeleting(true);
+          try {
+            await deleteEnrollment({ enrollmentId: enrollment._id });
+            toast.success("Enrollment deleted successfully!");
+            setOpen(false);
+          } catch (error) {
+            console.error("Failed to delete enrollment:", error);
+            toast.error("Failed to delete enrollment", { description: (error as Error).message });
+          } finally {
+            setIsDeleting(false);
+          }
+        },
+      },
+      cancel: {
+        label: "Cancel",
+      },
+    });
   };
 
   const updateFormData = (
